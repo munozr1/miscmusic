@@ -42,6 +42,16 @@ struct SpotifyParty: Codable {
             }
         }
     }
+    
+    func updateParty(name: String, data: [String: Any], completion: @escaping (Result<Void, Error>) -> Void){
+        db.collection("parties").document(name).updateData(data) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                print("update successful")
+            }
+        }
+    }
 
     // Function to set up a listener for a party document
     func listenToParty(name: String) {

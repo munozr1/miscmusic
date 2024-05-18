@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MusicView: View {
     @StateObject var spotify: SpotifyController = SpotifyController.shared
+    var db = FirestoreController.shared
     var albumCoverImage: String = "https://i.scdn.co/image/ab67616d00001e027567ec7d3c07783e4f2111e0"
     var partyTitle: String = "The Dog House"
     @Binding var showMusicView: Bool
@@ -63,13 +64,32 @@ struct MusicView: View {
                 }
             }
             .padding()
-            .onChange(of: spotify.currentTrackURI, handleTrackChange)
+            .onChange(of: spotify.currentTrackURI, {
+                Task{
+                    await handleTrackChange()
+                }
+            })
         }
     }
     
-    func handleTrackChange(){
+    func handleTrackChange() async {
         print(spotify.currentTrackURI!)
         print(spotify.currentTrackName!)
+        if (db.party != nil) {
+            await withCheckedContinuation { continuation in
+                db.updateParty(name: db.party!.name, data: [
+                    "currentTrack": spotify.currentTrackName!
+                ]) { result in
+                    continuation.resume()
+                    switch result {
+                    case .success:
+                        print("Party successfully updated!")
+                    case .failure(let error):
+                        print("Error creating party: \(error)")
+                    }
+                }
+            }
+        }
         print("changed")
     }
 }
