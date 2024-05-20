@@ -13,7 +13,7 @@ struct Controls: View {
     @ObservedObject var spotify = SpotifyController.shared
     var db = FirestoreController.shared
     @State var voted: Bool = false
-    @Binding var host: Bool
+    @Binding var host: String
     var body: some View {
         HStack {
             Spacer()
@@ -65,7 +65,7 @@ struct Controls: View {
             Spacer()
             Spacer()
         }.onChange(of: db.party?.voteSkips, {
-            if host && Float(db.party!.listeners) / Float(db.party!.voteSkips)  > 0.5 {
+            if host == "Host" && Float(db.party!.listeners) / Float(db.party!.voteSkips)  > 0.5 {
                 spotify.skipTrack()
             }
         })
@@ -80,6 +80,6 @@ struct Controls: View {
 }
 
 #Preview {
-    @State var h = false
+    @State var h = "Host"
     return Controls(host: $h)
 }

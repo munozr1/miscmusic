@@ -11,16 +11,8 @@ struct HomeView: View {
     @ObservedObject var spotify = SpotifyController.shared
     @StateObject var db = FirestoreController.shared
     @State var party_code: String = ""
-    @State var state: String = "Spotify"
-    @Binding var hosting: Bool
+    @Binding var state: String
     
-    
-//    init(hosting: Bool){
-//        self.hosting = hosting
-//        if spotify.appRemote.isConnected{
-//            state = "Create"
-//        }
-//    }
     var body: some View {
         VStack{
             HStack{
@@ -99,6 +91,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    @State var h = false
-    return HomeView(hosting: $h)
+    @State var h = "Spotify"
+    return HomeView(state: $h)
 }
