@@ -11,6 +11,9 @@ import SwiftUI
 
 struct Controls: View {
     @ObservedObject var spotify = SpotifyController.shared
+    var db = FirestoreController.shared
+    @State var voted: Bool = false
+    @Binding var host: Bool
     var body: some View {
         HStack {
             Spacer()
@@ -46,7 +49,13 @@ struct Controls: View {
             Spacer()
             
             Button{
-                spotify.skipTrack()
+                if spotify.appRemote.isConnected {
+                    spotify.skipTrack()
+                }else{
+//                    Task{
+                        handleGuestSkip(s: true)
+//                    }
+                }
             }label :{
                 Image(systemName: "forward.end")
                     .resizable()
@@ -55,10 +64,22 @@ struct Controls: View {
             
             Spacer()
             Spacer()
+        }.onChange(of: db.party?.voteSkips, {
+            if host && Float(db.party!.listeners) / Float(db.party!.voteSkips)  > 0.5 {
+                spotify.skipTrack()
+            }
+        })
+    }
+    
+    func handleGuestSkip(s: Bool) {
+        if (db.party != nil) {
+            db.voteToSkip()
         }
+        print("changed")
     }
 }
 
 #Preview {
-    return Controls()
+    @State var h = false
+    return Controls(host: $h)
 }

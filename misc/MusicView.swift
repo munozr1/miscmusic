@@ -10,8 +10,7 @@ import SwiftUI
 struct MusicView: View {
     @StateObject var spotify: SpotifyController = SpotifyController.shared
     var db = FirestoreController.shared
-    var albumCoverImage: String = "https://i.scdn.co/image/ab67616d00001e027567ec7d3c07783e4f2111e0"
-    var partyTitle: String = "The Dog House"
+    var albumCoverImage: String = "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228"
     @Binding var showMusicView: Bool
     var body: some View {
         ZStack{
@@ -19,7 +18,7 @@ struct MusicView: View {
                 VStack{
                     HStack{
                         Spacer()
-                        Text(partyTitle)
+                        Text(db.party?.name ?? "The Dog House")
                             .font(.system(size: 15, design: .monospaced))
                         Spacer()
                         Button {

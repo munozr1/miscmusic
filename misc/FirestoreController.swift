@@ -11,6 +11,7 @@ struct SpotifyParty: Codable {
     var skipped: Int
     var listeners: Int
     var duration: Float
+    var voteSkips: Int
 }
 
 @Observable class FirestoreController: ObservableObject {
@@ -51,6 +52,27 @@ struct SpotifyParty: Codable {
                 print("update successful")
             }
         }
+    }
+    
+    
+    func voteToSkip() {
+        let partyRef = db.collection("Parties").document(party!.name)
+
+        partyRef.updateData([
+            "voteSkips": FieldValue.increment(Int64(1))
+        ]) { error in
+            if let error = error {
+                print("Error updating vote skips: \(error.localizedDescription)")
+            } else {
+                print("Vote skip count incremented successfully.")
+            }
+        }
+    }
+
+    
+    func resetListener(){
+        listener?.remove()
+        party = nil
     }
 
     // Function to set up a listener for a party document

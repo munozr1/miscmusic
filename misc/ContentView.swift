@@ -11,9 +11,7 @@ struct ContentView: View {
     @ObservedObject var spotify: SpotifyController = SpotifyController.shared
     @State var showMusicView: Bool = false
     @State var musicViewHeight = 390
-    var partyTitle: String = "The Dog House"
-    
-    
+    @State var isHost: Bool = false
     
     var body: some View {
         ZStack{
@@ -34,12 +32,12 @@ struct ContentView: View {
             VStack {
                 
                 if !showMusicView{
-                    HomeView(spotify: spotify)
+                    HomeView(hosting: $isHost)
                 }
                 MusicView(showMusicView: $showMusicView)
                 .frame(width: 390)
                     .transition(.move(edge: .bottom))
-                Controls()
+                Controls(host: $isHost)
                     .frame(width: 410)
                     .foregroundColor(showMusicView ? .white : .gray)
                     .padding(.bottom, 15)

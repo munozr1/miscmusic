@@ -51,5 +51,6 @@ struct LongRoundButton: View {
 }
 
 #Preview {
-    HostView()
+    @State var s = "test"
+    return HostView(state: $s)
 }

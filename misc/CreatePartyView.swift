@@ -9,13 +9,15 @@ import SwiftUI
 
 struct CreatePartyView: View {
     var db = FirestoreController.shared
-    @Binding var presentView: Bool
     @State var name: String = ""
+    @Binding var state: String
     var body: some View {
         TextField("Party Name", text: $name)
             .multilineTextAlignment(.center)
-            .frame(width: 200)
+            .font(.title)
+            .frame(width: 250, height: 40)
             .shadow(radius: 20)
+            .padding(.bottom)
         
         LongRoundButton(action: {
             if name.isEmpty { return }
@@ -32,7 +34,7 @@ struct CreatePartyView: View {
                 switch result {
                     case .success:
                         print("Party successfully created!")
-                        presentView = false
+                        state = "Host"
                     case .failure(let error):
                         print("Error creating party: \(error)")
                 }
@@ -45,6 +47,6 @@ struct CreatePartyView: View {
 }
 
 #Preview {
-    @State var p = true
-    return CreatePartyView(presentView: $p)
+    @State var s: String = "Test"
+    return CreatePartyView(state: $s)
 }

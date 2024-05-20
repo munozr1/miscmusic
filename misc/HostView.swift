@@ -9,14 +9,10 @@ import SwiftUI
 
 struct HostView: View {
     var db = FirestoreController.shared
+    @ObservedObject var spotify = SpotifyController.shared
+    @Binding var state: String
     var body: some View {
         VStack{
-            Text("Party Code")
-                .foregroundColor(.gray)
-                .font(.system(size: 10))
-            Text("123456")
-                .font(.largeTitle)
-                .padding(.bottom)
             Spacer()
             VStack{
                 HStack{
@@ -53,7 +49,11 @@ struct HostView: View {
                     Spacer()
                 }.padding()
             }
-            LongRoundButton(action: {print("end party")}, label: "End Party", background_color: .red)
+            LongRoundButton(action: {
+                state = "Create"
+                print("end party")
+                spotify.disconnect()
+            }, label: "End Party", background_color: .red)
             Spacer()
             Spacer()
         }
@@ -61,5 +61,6 @@ struct HostView: View {
 }
 
 #Preview {
-    HostView()
+    @State var s = "test"
+    return HostView(state: $s)
 }

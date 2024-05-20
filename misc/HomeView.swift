@@ -8,12 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var spotify: SpotifyController
+    @ObservedObject var spotify = SpotifyController.shared
+    @StateObject var db = FirestoreController.shared
     @State var party_code: String = ""
-    var hosting: Bool = true
-    @State var creatingParty = true
+    @State var state: String = "Spotify"
+    @Binding var hosting: Bool
     
     
+//    init(hosting: Bool){
+//        self.hosting = hosting
+//        if spotify.appRemote.isConnected{
+//            state = "Create"
+//        }
+//    }
     var body: some View {
         VStack{
             HStack{
@@ -26,23 +33,56 @@ struct HomeView: View {
             Spacer()
             Spacer()
             Spacer()
-            if spotify.appRemote.isConnected && hosting {
-                if creatingParty {
-                    CreatePartyView(presentView: $creatingParty)
-                }else{
-                    HostView()
+            
+            switch state {
+            case "Create":
+                CreatePartyView(state: $state)
+                Button{
+                    state = "Join"
+                } label: {
+                Text("Join party instead")
+                    .font(.system(size: 15))
+                    .foregroundColor(.gray)
                 }
-            }
-            else{
+            case "Join":
+                JoinPartyView()
+                Button{
+                    if spotify.appRemote.isConnected {
+                        state = "Create"
+                    }else{
+                        state = "Spotify"
+                    }
+                } label: {
+                Text("Host party instead")
+                    .font(.system(size: 15))
+                    .foregroundColor(.gray)
+                }
+            case "Host":
+                HostView(state: $state)
+            case "Guest":
+                GuestView()
+            case "Spotify":
                 Text("Host a party")
+                    .multilineTextAlignment(.center)
+                    .font(.title)
+                    .frame(width: 250, height: 40)
+                    .shadow(radius: 20)
+                    .padding(.bottom)
                 LongRoundButton(action: {
                     if !spotify.appRemote.isConnected {
                         spotify.connect()
                     }
                 },icon: true ,label: "Sign in with Spotify", icon_name: "SpotifyLogo", system_icon: false)
-                Text("Join party instead")
-                    .font(.system(size: 15))
-                    .foregroundColor(.gray)
+                Button{
+                    state = "Join"
+                } label: {
+                    Text("Join party instead")
+                        .font(.system(size: 15))
+                        .foregroundColor(.gray)
+                }
+            default:
+                HostView(state: $state)
+        
             }
             Spacer()
             Spacer()
@@ -51,10 +91,14 @@ struct HomeView: View {
     }
     
     func handleChange(){
+        if spotify.appRemote.isConnected {
+            state = "Create"
+        }
         print("change")
     }
 }
 
 #Preview {
-    HomeView(spotify: SpotifyController())
+    @State var h = false
+    return HomeView(hosting: $h)
 }

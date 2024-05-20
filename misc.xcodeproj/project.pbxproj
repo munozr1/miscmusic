@@ -49,6 +49,8 @@
 		94B7E1582BF4480F0048F33A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94B7E1572BF4480F0048F33A /* Preview Assets.xcassets */; };
 		94B7E15F2BF448A20048F33A /* MusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7E15E2BF448A20048F33A /* MusicView.swift */; };
 		94B7E1612BF451230048F33A /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7E1602BF451230048F33A /* Controls.swift */; };
+		94C49B1A2BF9693500E48214 /* GuestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C49B192BF9693500E48214 /* GuestView.swift */; };
+		94C49B1C2BF96D3B00E48214 /* JoinPartyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C49B1B2BF96D3B00E48214 /* JoinPartyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +70,8 @@
 		94B7E1572BF4480F0048F33A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		94B7E15E2BF448A20048F33A /* MusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView.swift; sourceTree = "<group>"; };
 		94B7E1602BF451230048F33A /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
+		94C49B192BF9693500E48214 /* GuestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestView.swift; sourceTree = "<group>"; };
+		94C49B1B2BF96D3B00E48214 /* JoinPartyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinPartyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +156,8 @@
 				948304842BF6A1FF00CA92F2 /* HostView.swift */,
 				94926C842BF91753009C46C9 /* FirestoreController.swift */,
 				94926C862BF9191F009C46C9 /* CreatePartyView.swift */,
+				94C49B192BF9693500E48214 /* GuestView.swift */,
+				94C49B1B2BF96D3B00E48214 /* JoinPartyView.swift */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -274,6 +280,8 @@
 				948304832BF699FF00CA92F2 /* HomeView.swift in Sources */,
 				94B7E1532BF4480C0048F33A /* ContentView.swift in Sources */,
 				948304852BF6A1FF00CA92F2 /* HostView.swift in Sources */,
+				94C49B1A2BF9693500E48214 /* GuestView.swift in Sources */,
+				94C49B1C2BF96D3B00E48214 /* JoinPartyView.swift in Sources */,
 				9483047C2BF6937D00CA92F2 /* SpotifyController.swift in Sources */,
 				948304812BF6970200CA92F2 /* LongRoundButton.swift in Sources */,
 				94B7E1612BF451230048F33A /* Controls.swift in Sources */,
