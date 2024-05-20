@@ -10,6 +10,7 @@ import SwiftUI
 struct JoinPartyView: View {
     var db = FirestoreController.shared
     @State var name: String = ""
+    @Binding var state: String
     var body: some View {
         TextField("Party Name", text: $name)
             .multilineTextAlignment(.center)
@@ -20,14 +21,15 @@ struct JoinPartyView: View {
         
         LongRoundButton(action: {
             if name.isEmpty { return }
-            Task {
-                await joinParty()
-            }
+            joinParty()
         }, label: "Join", background_color: .green)
     }
     
-    func joinParty() async {
+    func joinParty() {
         db.listenToParty(name: name)
+        db.incrementListener(name: name)
+        print("Join Party View")
+        state = "Guest"
     }
     
     
@@ -35,5 +37,6 @@ struct JoinPartyView: View {
 }
 
 #Preview {
-    JoinPartyView()
+    @State var s = "Join"
+    return JoinPartyView(state: $s)
 }

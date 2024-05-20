@@ -9,17 +9,23 @@ import SwiftUI
 
 struct GuestView: View {
     var db = FirestoreController.shared
+    @Binding var state: String
     var body: some View {
         VStack{
             Spacer()
-            LongRoundButton(action: db.resetListener, label: "Leave Party", background_color: .red)
+            LongRoundButton(action: leave, label: "Leave Party", background_color: .red)
             Spacer()
         }
     }
     
+    func leave(){
+        db.resetListener()
+        state = "Join"
+    }
     
 }
 
 #Preview {
-    GuestView()
+    @State var s = "Guest"
+    return GuestView(state: $s)
 }

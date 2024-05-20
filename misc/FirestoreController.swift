@@ -29,6 +29,7 @@ struct SpotifyParty: Codable {
             "listeners": 0,
             "played": 0,
             "skipped": 0,
+            "voteSkips": 0,
             "currentTrack": SpotifyController.shared.currentTrackName ?? "",
             "code": "1234",
             "duration": 2
@@ -56,7 +57,7 @@ struct SpotifyParty: Codable {
     
     
     func voteToSkip() {
-        let partyRef = db.collection("Parties").document(party!.name)
+        let partyRef = db.collection("parties").document(party!.name)
 
         partyRef.updateData([
             "voteSkips": FieldValue.increment(Int64(1))
@@ -68,16 +69,45 @@ struct SpotifyParty: Codable {
             }
         }
     }
+    
+    func incrementListener(name: String) {
+        let partyRef = db.collection("parties").document(name)
 
+        partyRef.updateData([
+            "listeners": FieldValue.increment(Int64(1))
+        ]) { error in
+            if let error = error {
+                print("Error updating listeners: \(error.localizedDescription)")
+            } else {
+                print("Vote listeners incremented successfully.")
+            }
+        }
+    }
+
+    func decrementListener() {
+        if(party?.name == nil) { return }
+        let partyRef = db.collection("parties").document(party!.name)
+
+        partyRef.updateData([
+            "listeners": FieldValue.increment(Int64(-1))
+        ]) { error in
+            if let error = error {
+                print("Error updating listeners: \(error.localizedDescription)")
+            } else {
+                print("Vote listeners decremented successfully.")
+            }
+        }
+    }
     
     func resetListener(){
+        decrementListener()
         listener?.remove()
         party = nil
     }
 
     // Function to set up a listener for a party document
     func listenToParty(name: String) {
-        listener?.remove()  // Remove any existing listener
+        resetListener()
         listener = db.collection("parties").document(name).addSnapshotListener { documentSnapshot, error in
             guard let document = documentSnapshot, document.exists else {
                 print("Document does not exist")
@@ -90,15 +120,15 @@ struct SpotifyParty: Codable {
                 } else {
                     self.skipRate = Int((Float(self.party!.skipped) / Float(self.party!.played)) * 100)
                 }
-
                 print(self.party ?? "no party")
             } catch let error {
                 print("Error decoding party data: \(error)")
             }
         }
+        
     }
 
     deinit {
-        listener?.remove()  // Clean up the listener when the object is deallocated
+        resetListener()
     }
 }

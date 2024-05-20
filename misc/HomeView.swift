@@ -37,7 +37,7 @@ struct HomeView: View {
                     .foregroundColor(.gray)
                 }
             case "Join":
-                JoinPartyView()
+                JoinPartyView(state: $state)
                 Button{
                     if spotify.appRemote.isConnected {
                         state = "Create"
@@ -52,7 +52,7 @@ struct HomeView: View {
             case "Host":
                 HostView(state: $state)
             case "Guest":
-                GuestView()
+                GuestView(state: $state)
             case "Spotify":
                 Text("Host a party")
                     .multilineTextAlignment(.center)
