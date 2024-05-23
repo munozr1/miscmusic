@@ -30,6 +30,9 @@ struct HomeView: View {
             case "Create":
                 CreatePartyView(state: $state)
                 Button{
+                    if spotify.appRemote.isConnected {
+                        spotify.disconnect()
+                    }
                     state = "Join"
                 } label: {
                 Text("Join party instead")

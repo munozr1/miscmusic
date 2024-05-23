@@ -49,7 +49,7 @@ struct MusicView: View {
                 
                 if showMusicView {
                     if spotify.currentTrackImage == nil{
-                        AsyncImage(url: URL(string: albumCoverImage)) { image in
+                        AsyncImage(url: URL(string: db.party?.image != nil ? "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))" : albumCoverImage)) { image in
                             image
                                 .shadow(radius: 10)
                         } placeholder: {
@@ -64,33 +64,20 @@ struct MusicView: View {
             }
             .padding()
             .onChange(of: spotify.currentTrackURI, {
-                Task{
-                    await handleTrackChange()
-                }
+                 handleTrackChange()
             })
         }
     }
     
-    func handleTrackChange() async {
-        print(spotify.currentTrackURI!)
-        print(spotify.currentTrackName!)
-        if (db.party != nil) {
-            await withCheckedContinuation { continuation in
-                db.updateParty(name: db.party!.name, data: [
-                    "currentTrack": spotify.currentTrackName!
-                ]) { result in
-                    continuation.resume()
-                    switch result {
-                    case .success:
-                        print("Party successfully updated!")
-                    case .failure(let error):
-                        print("Error creating party: \(error)")
-                    }
-                }
+    func handleTrackChange () {
+            if let party = db.party {
+                 db.updateParty(name: party.name, data: [
+                        "currentTrack": spotify.currentTrackName!,
+                        "image": spotify.currentTrackImageURI
+                    ])
+                db.incrementPlayed()
             }
         }
-        print("changed")
-    }
 }
 
 #Preview {

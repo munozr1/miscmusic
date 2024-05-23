@@ -13,7 +13,7 @@ struct Controls: View {
     @ObservedObject var spotify = SpotifyController.shared
     var db = FirestoreController.shared
     @State var voted: Bool = false
-    @Binding var host: String
+    @Binding var state: String
     var body: some View {
         HStack {
             Spacer()
@@ -49,7 +49,7 @@ struct Controls: View {
             Spacer()
             
             Button{
-                if spotify.appRemote.isConnected {
+                if state == "Host" {
                     spotify.skipTrack()
                 }else{
 //                    Task{
@@ -57,23 +57,20 @@ struct Controls: View {
 //                    }
                 }
             }label :{
-                Image(systemName: "forward.end")
+                Image(systemName: voted ? "forward.end" : "forward.end.fill")
                     .resizable()
                     .frame(width: 20, height: 20)
             }
             
             Spacer()
             Spacer()
-        }.onChange(of: db.party?.voteSkips, {
-            if host == "Host" && Float(db.party!.listeners) / Float(db.party!.voteSkips)  > 0.5 {
-                spotify.skipTrack()
-            }
-        })
+        }
     }
     
     func handleGuestSkip(s: Bool) {
         if (db.party != nil) {
             db.voteToSkip()
+            voted = true
         }
         print("changed")
     }
@@ -81,5 +78,5 @@ struct Controls: View {
 
 #Preview {
     @State var h = "Host"
-    return Controls(host: $h)
+    return Controls(state: $h)
 }

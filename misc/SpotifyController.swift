@@ -16,6 +16,7 @@ class SpotifyController: NSObject, ObservableObject {
     var accessToken: String? = nil
     var playURI = ""
     @Published var currentTrackURI: String?
+    @Published var currentTrackImageURI: String = "spotify:image:ab67616d00001e02ff9ca10b55ce82ae553c8228"
     @Published var currentTrackName: String?
     @Published var currentTrackArtist: String?
     @Published var currentTrackDuration: Int?
@@ -111,6 +112,7 @@ class SpotifyController: NSObject, ObservableObject {
             if let error = error {
                 print("Error getting player state: \(error)")
             } else if let playerState = result as? SPTAppRemotePlayerState {
+                print("Track: \(playerState.track.imageIdentifier) URI: \(playerState.track.uri)")
                 self.appRemote.imageAPI?.fetchImage(forItem: playerState.track, with: CGSize(width: 300, height: 300), callback: { (image, error) in
                     if let error = error {
                         print("Error fetching track image: \(error.localizedDescription)")
@@ -154,6 +156,7 @@ extension SpotifyController: SPTAppRemotePlayerStateDelegate {
         self.currentTrackArtist = playerState.track.artist.name
         self.currentTrackDuration = Int(playerState.track.duration) / 1000
         self.currentTrackPaused = playerState.isPaused
+        self.currentTrackImageURI = playerState.track.imageIdentifier
         fetchImage()
     }
 }

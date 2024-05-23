@@ -35,7 +35,7 @@ struct HostView: View {
                             .fontWeight(.heavy)
                             .foregroundColor(db.skipRate < 30 ? .green : .red)
                         Text("Skip Rate")
-                    
+                        
                     }
                     Spacer()
                     Spacer()
@@ -44,7 +44,7 @@ struct HostView: View {
                             .font(.system(size: 20))
                             .fontWeight(.heavy)
                         Text("Duration")
-                    
+                        
                     }
                     Spacer()
                 }.padding()
@@ -56,8 +56,26 @@ struct HostView: View {
             }, label: "End Party", background_color: .red)
             Spacer()
             Spacer()
-        }
+        }.onChange(of: db.party?.voteSkips,{
+            print("checking if skips surpass 50%")
+            if Float(db.party!.voteSkips)/Float(db.party!.listeners) > 0.5 {
+                spotify.skipTrack()
+                db.incrementSkipped()
+                Task{
+                    await resetSkips()
+                }
+            }
+        })
     }
+    
+    func resetSkips() async {
+            if let party = db.party {
+                    db.updateParty(name: party.name, data: [
+                        "voteSkips": 0
+                    ])
+            }
+            print("changed")
+        }
 }
 
 #Preview {

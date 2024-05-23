@@ -6,6 +6,7 @@ import Observation
 struct SpotifyParty: Codable {
     var name: String
     var currentTrack: String
+    var image: String
     var code: String
     var played: Int
     var skipped: Int
@@ -31,6 +32,7 @@ struct SpotifyParty: Codable {
             "skipped": 0,
             "voteSkips": 0,
             "currentTrack": SpotifyController.shared.currentTrackName ?? "",
+            "image": String(SpotifyController.shared.currentTrackImageURI.split(separator: ":").last!),
             "code": "1234",
             "duration": 2
         ] as [String : Any]
@@ -45,14 +47,8 @@ struct SpotifyParty: Codable {
         }
     }
     
-    func updateParty(name: String, data: [String: Any], completion: @escaping (Result<Void, Error>) -> Void){
-        db.collection("parties").document(name).updateData(data) { error in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                print("update successful")
-            }
-        }
+    func updateParty(name: String, data: [String: Any]){
+        db.collection("parties").document(name).updateData(data) 
     }
     
     
@@ -61,6 +57,34 @@ struct SpotifyParty: Codable {
 
         partyRef.updateData([
             "voteSkips": FieldValue.increment(Int64(1))
+        ]) { error in
+            if let error = error {
+                print("Error updating vote skips: \(error.localizedDescription)")
+            } else {
+                print("Vote skip count incremented successfully.")
+            }
+        }
+    }
+    
+    func incrementSkipped() {
+        let partyRef = db.collection("parties").document(party!.name)
+
+        partyRef.updateData([
+            "skipped": FieldValue.increment(Int64(1))
+        ]) { error in
+            if let error = error {
+                print("Error updating vote skips: \(error.localizedDescription)")
+            } else {
+                print("Vote skip count incremented successfully.")
+            }
+        }
+    }
+    
+    func incrementPlayed() {
+        let partyRef = db.collection("parties").document(party!.name)
+
+        partyRef.updateData([
+            "played": FieldValue.increment(Int64(1))
         ]) { error in
             if let error = error {
                 print("Error updating vote skips: \(error.localizedDescription)")
