@@ -3,17 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleURLTypes</key>
-<array>
-  <dict>
-    <key>CFBundleURLName</key>
-    <string>com.munozcreates.misc</string>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>misc</string>
-    </array>
-  </dict>
-</array>
-
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.munozcreates.misc</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>misc</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>spotify</string>

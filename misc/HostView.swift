@@ -53,6 +53,9 @@ struct HostView: View {
                 state = "Create"
                 print("end party")
                 spotify.disconnect()
+                Task {
+                    await db.endParty()
+                }
             }, label: "End Party", background_color: .red)
             Spacer()
             Spacer()
@@ -61,14 +64,12 @@ struct HostView: View {
             if Float(db.party!.voteSkips)/Float(db.party!.listeners) > 0.5 {
                 spotify.skipTrack()
                 db.incrementSkipped()
-                Task{
-                    await resetSkips()
-                }
+                resetSkips()
             }
         })
     }
     
-    func resetSkips() async {
+    func resetSkips() {
             if let party = db.party {
                     db.updateParty(name: party.name, data: [
                         "voteSkips": 0

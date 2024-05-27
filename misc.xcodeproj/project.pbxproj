@@ -15,6 +15,8 @@
 		94926C4A2BF90E93009C46C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94926C492BF90E93009C46C9 /* GoogleService-Info.plist */; };
 		94926C852BF91753009C46C9 /* FirestoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94926C842BF91753009C46C9 /* FirestoreController.swift */; };
 		94926C872BF9191F009C46C9 /* CreatePartyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94926C862BF9191F009C46C9 /* CreatePartyView.swift */; };
+		949755DB2C001DE900ED22B7 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949755DA2C001DE900ED22B7 /* AuthView.swift */; };
+		949755DD2C001E1600ED22B7 /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949755DC2C001E1600ED22B7 /* AuthenticationController.swift */; };
 		94B7E1512BF4480C0048F33A /* miscApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7E1502BF4480C0048F33A /* miscApp.swift */; };
 		94B7E1532BF4480C0048F33A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7E1522BF4480C0048F33A /* ContentView.swift */; };
 		94B7E1552BF4480F0048F33A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94B7E1542BF4480F0048F33A /* Assets.xcassets */; };
@@ -53,6 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		94828EEF2C02D0AB00149885 /* misc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = misc.entitlements; sourceTree = "<group>"; };
 		948304792BF6797B00CA92F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9483047A2BF67B4D00CA92F2 /* Misc-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Misc-Bridging-Header.h"; sourceTree = "<group>"; };
 		9483047B2BF6937D00CA92F2 /* SpotifyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyController.swift; sourceTree = "<group>"; };
@@ -62,6 +65,8 @@
 		94926C492BF90E93009C46C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94926C842BF91753009C46C9 /* FirestoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreController.swift; sourceTree = "<group>"; };
 		94926C862BF9191F009C46C9 /* CreatePartyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePartyView.swift; sourceTree = "<group>"; };
+		949755DA2C001DE900ED22B7 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		949755DC2C001E1600ED22B7 /* AuthenticationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationController.swift; sourceTree = "<group>"; };
 		94B7E14D2BF4480C0048F33A /* misc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = misc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94B7E1502BF4480C0048F33A /* miscApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = miscApp.swift; sourceTree = "<group>"; };
 		94B7E1522BF4480C0048F33A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -139,7 +144,10 @@
 		94B7E14F2BF4480C0048F33A /* misc */ = {
 			isa = PBXGroup;
 			children = (
+				94828EEF2C02D0AB00149885 /* misc.entitlements */,
 				94926C492BF90E93009C46C9 /* GoogleService-Info.plist */,
+				949755DA2C001DE900ED22B7 /* AuthView.swift */,
+				949755DC2C001E1600ED22B7 /* AuthenticationController.swift */,
 				9483047F2BF696ED00CA92F2 /* components */,
 				948304792BF6797B00CA92F2 /* Info.plist */,
 				94B7E1502BF4480C0048F33A /* miscApp.swift */,
@@ -276,9 +284,11 @@
 				94926C852BF91753009C46C9 /* FirestoreController.swift in Sources */,
 				948304832BF699FF00CA92F2 /* HomeView.swift in Sources */,
 				94B7E1532BF4480C0048F33A /* ContentView.swift in Sources */,
+				949755DB2C001DE900ED22B7 /* AuthView.swift in Sources */,
 				948304852BF6A1FF00CA92F2 /* HostView.swift in Sources */,
 				94C49B1A2BF9693500E48214 /* GuestView.swift in Sources */,
 				94C49B1C2BF96D3B00E48214 /* JoinPartyView.swift in Sources */,
+				949755DD2C001E1600ED22B7 /* AuthenticationController.swift in Sources */,
 				9483047C2BF6937D00CA92F2 /* SpotifyController.swift in Sources */,
 				948304812BF6970200CA92F2 /* LongRoundButton.swift in Sources */,
 				94B7E1612BF451230048F33A /* Controls.swift in Sources */,
@@ -415,6 +425,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = misc/misc.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"misc/Preview Content\"";
@@ -437,9 +448,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.munozcreates.misc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.munozcreates.playlistparty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "misc/Misc-Bridging-Header.h";
@@ -453,6 +464,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = misc/misc.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"misc/Preview Content\"";
@@ -475,9 +487,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.munozcreates.misc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.munozcreates.playlistparty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "misc/Misc-Bridging-Header.h";

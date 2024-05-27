@@ -51,6 +51,16 @@ struct SpotifyParty: Codable {
         db.collection("parties").document(name).updateData(data) 
     }
     
+    func endParty() async {
+        do {
+            try await db.collection("parties").document(party!.name).delete()
+            self.party = nil
+            print("Document successfully removed!")
+        } catch {
+          print("Error removing document: \(error)")
+        }
+        
+    }
     
     func voteToSkip() {
         let partyRef = db.collection("parties").document(party!.name)
@@ -131,7 +141,7 @@ struct SpotifyParty: Codable {
 
     // Function to set up a listener for a party document
     func listenToParty(name: String) {
-        resetListener()
+        listener?.remove()
         listener = db.collection("parties").document(name).addSnapshotListener { documentSnapshot, error in
             guard let document = documentSnapshot, document.exists else {
                 print("Document does not exist")

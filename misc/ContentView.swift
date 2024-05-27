@@ -14,48 +14,54 @@ struct ContentView: View {
     @State var musicViewHeight = 390
     @State var isHost: Bool = false
     @State var state = "Spotify"
+    var authModel = AuthenticationModel()
     
     var body: some View {
         ZStack{
-            if showMusicView{
-                if spotify.currentTrackImage != nil {
-                    Image(uiImage: spotify.currentTrackImage!)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .edgesIgnoringSafeArea(.all)
-                        .blur(radius: 25)
-                }else {
-                    AsyncImage(url: URL(string: "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))")) { image in
-                        image
+            if authModel.authenticated == .loggedin{
+                if showMusicView{
+                    if spotify.currentTrackImage != nil {
+                        Image(uiImage: spotify.currentTrackImage!)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .edgesIgnoringSafeArea(.all)
                             .blur(radius: 25)
-                    } placeholder: {
-//                        ProgressView()
+                    }else {
+                        AsyncImage(url: URL(string: "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))")) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .edgesIgnoringSafeArea(.all)
+                                .blur(radius: 25)
+                        } placeholder: {
+                            //                        ProgressView()
+                        }
+                        
                     }
+                    Rectangle()
+                        .aspectRatio(contentMode: .fill)
+                        .edgesIgnoringSafeArea(.all)
+                        .foregroundColor(.gray)
+                        .opacity(0.3)
+                }
+                VStack {
                     
+                    if !showMusicView{
+                        //                    HomeView(hosting: $isHost)
+                        HomeView(state: $state)
+                    }
+                    MusicView(showMusicView: $showMusicView)
+                        .frame(width: 390)
+                        .transition(.move(edge: .bottom))
+                    
+                    Controls(state: $state)
+                        .frame(width: 410)
+                        .foregroundColor(showMusicView ? .white : .gray)
+                        .padding(.bottom, 15)
                 }
-                Rectangle()
-                    .aspectRatio(contentMode: .fill)
-                    .edgesIgnoringSafeArea(.all)
-                    .foregroundColor(.gray)
-                    .opacity(0.3)
             }
-            VStack {
-                
-                if !showMusicView{
-//                    HomeView(hosting: $isHost)
-                HomeView(state: $state)
-                }
-                MusicView(showMusicView: $showMusicView)
-                .frame(width: 390)
-                    .transition(.move(edge: .bottom))
-            
-                Controls(state: $state)
-                    .frame(width: 410)
-                    .foregroundColor(showMusicView ? .white : .gray)
-                    .padding(.bottom, 15)
+            else{
+                AuthView(model: authModel)
             }
         }.onChange(of: spotify.accessToken, handleChange)
     }

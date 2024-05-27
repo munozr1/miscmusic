@@ -51,20 +51,20 @@ struct Controls: View {
             Button{
                 if state == "Host" {
                     spotify.skipTrack()
-                }else{
+                }else if state == "Guest"{
 //                    Task{
-                        handleGuestSkip(s: true)
+                    handleGuestSkip(s: true)
 //                    }
                 }
             }label :{
-                Image(systemName: voted ? "forward.end" : "forward.end.fill")
+                Image(systemName: !voted ? "forward.end" : "forward.end.fill")
                     .resizable()
                     .frame(width: 20, height: 20)
             }
             
             Spacer()
             Spacer()
-        }
+        }.onChange(of: db.party?.currentTrack){ voted = false }
     }
     
     func handleGuestSkip(s: Bool) {
