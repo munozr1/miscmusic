@@ -11,8 +11,8 @@ import Combine
 
 class SpotifyController: NSObject, ObservableObject {
     static let shared = SpotifyController()
-    let spotifyClientID = "19fb01c4d73d4f8bacf062b88aa9e846"
-    let spotifyRedirectURL = URL(string: "misc://spotify-login-callback")!
+    let spotifyClientID: String = String(Secrets.SpotifyClientID)
+    let spotifyRedirectURL = URL(string: String(Secrets.SpotifyRedirectURL))!
     var accessToken: String? = nil
     var playURI = ""
     @Published var currentTrackURI: String?

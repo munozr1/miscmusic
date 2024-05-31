@@ -14,7 +14,7 @@ struct ContentView: View {
     @State var musicViewHeight = 390
     @State var isHost: Bool = false
     @State var state = "Spotify"
-    var authModel = AuthenticationModel()
+    var authModel: AuthenticationModel
     
     var body: some View {
         ZStack{
@@ -73,5 +73,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(spotify: SpotifyController())
+    ContentView(spotify: SpotifyController(), authModel: AuthenticationModel())
 }

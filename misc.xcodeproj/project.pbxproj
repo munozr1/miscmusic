@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9462318A2C0A24AE00FBA238 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946231892C0A24AE00FBA238 /* Secrets.swift */; };
 		948304782BF678CB00CA92F2 /* SpotifyiOS in Frameworks */ = {isa = PBXBuildFile; productRef = 948304772BF678CB00CA92F2 /* SpotifyiOS */; };
 		9483047C2BF6937D00CA92F2 /* SpotifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9483047B2BF6937D00CA92F2 /* SpotifyController.swift */; };
 		948304812BF6970200CA92F2 /* LongRoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948304802BF6970200CA92F2 /* LongRoundButton.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		946231892C0A24AE00FBA238 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		94828EEF2C02D0AB00149885 /* misc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = misc.entitlements; sourceTree = "<group>"; };
 		948304792BF6797B00CA92F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9483047A2BF67B4D00CA92F2 /* Misc-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Misc-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				948304792BF6797B00CA92F2 /* Info.plist */,
 				94B7E1502BF4480C0048F33A /* miscApp.swift */,
 				94B7E1522BF4480C0048F33A /* ContentView.swift */,
+				946231892C0A24AE00FBA238 /* Secrets.swift */,
 				94B7E15E2BF448A20048F33A /* MusicView.swift */,
 				94B7E1602BF451230048F33A /* Controls.swift */,
 				94B7E1542BF4480F0048F33A /* Assets.xcassets */,
@@ -282,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94926C852BF91753009C46C9 /* FirestoreController.swift in Sources */,
+				9462318A2C0A24AE00FBA238 /* Secrets.swift in Sources */,
 				948304832BF699FF00CA92F2 /* HomeView.swift in Sources */,
 				94B7E1532BF4480C0048F33A /* ContentView.swift in Sources */,
 				949755DB2C001DE900ED22B7 /* AuthView.swift in Sources */,

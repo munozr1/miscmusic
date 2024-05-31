@@ -22,10 +22,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct miscApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var spotifyController = SpotifyController.shared
+    var authModel = AuthenticationModel()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(authModel: authModel)
                 .onOpenURL { url in
                     spotifyController.setAccessToken(from: url)
                     //when redirected back to app from spotify, call connect again, idk why but it works
