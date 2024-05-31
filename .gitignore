@@ -1,2 +1,4 @@
 misc/Secrets.swift
+misc/Info.plist
+misc/GoogleService-Info.plist
 misc.xcodeproj/
