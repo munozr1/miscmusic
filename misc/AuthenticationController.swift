@@ -16,6 +16,7 @@ import FirebaseAuth
     var context = LAContext();
     var authenticated: AuthenticationState = .loggedout
     fileprivate var currentNonce: String?
+    var user: User?
 
     
     enum AuthenticationState {
@@ -26,6 +27,7 @@ import FirebaseAuth
         do{
             try Auth.auth().signOut()
             authenticated = .loggedout
+            user = nil
         } catch {
             print("Could not sign out: \(error.localizedDescription)")
         }
@@ -59,8 +61,14 @@ import FirebaseAuth
                 let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: appleIDTokenString, rawNonce: nonce)
                 Task {
                     do{
-                        _ = try await Auth.auth().signIn(with: credential)
+                        let res = try await Auth.auth().signIn(with: credential)
+                                
+                        if  res.credential == nil{
+                            print("Error Logging in")
+                            return
+                        }
                         authenticated = .loggedin
+                        user = res.user
                     } catch {
                         print("Error Authenticating \(error.localizedDescription)")
                     }
