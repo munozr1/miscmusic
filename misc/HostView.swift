@@ -40,7 +40,7 @@ struct HostView: View {
                     Spacer()
                     Spacer()
                     VStack{
-                        Text("\(db.party?.duration ?? 0)")
+                        Text("\( readableDuration(from: db.party?.duration ?? 0))")
                             .font(.system(size: 20))
                             .fontWeight(.heavy)
                         Text("Duration")
@@ -69,6 +69,22 @@ struct HostView: View {
             }
         })*/
     }
+    
+    func readableDuration(from duration: Float) -> String {
+        let totalSeconds = Int(duration)
+        let hours = totalSeconds / 3600
+        let minutes = (totalSeconds % 3600) / 60
+        let seconds = totalSeconds % 60
+
+        if hours > 0 {
+            return "\(hours)hr"
+        } else if minutes > 0 {
+            return "\(minutes)min"
+        } else {
+            return "\(seconds)s"
+        }
+    }
+
     
     /*func resetSkips() {
         if let party = db.party {

@@ -59,7 +59,7 @@ struct SpotifyParty: Codable {
         guard let curr_user = AuthenticationModel.shared.user?.uid else {print("Not logged in") ; return }
         //if host != curr_user { print("Not Host") ; return }
         
-        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true){ _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true){ _ in
             if !self.shouldRun { self.stopTimer() }
             else { self.incrementDuration() }
         }
@@ -125,7 +125,7 @@ struct SpotifyParty: Codable {
         let partyRef = db.collection("parties").document(name)
 
         partyRef.updateData([
-            "duration": FieldValue.increment(Int64(1))
+            "duration": FieldValue.increment(Int64(300))
         ]) { error in
             if let error = error {
                 print("Error updating vote duration: \(error.localizedDescription)")
