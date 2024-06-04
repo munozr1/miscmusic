@@ -24,7 +24,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct miscApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var spotifyController = SpotifyController.shared
-    var authModel = AuthenticationModel()
+    var authModel = AuthenticationModel.shared
 
     var body: some Scene {
         WindowGroup {

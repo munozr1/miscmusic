@@ -40,7 +40,7 @@ struct HostView: View {
                     Spacer()
                     Spacer()
                     VStack{
-                        Text("1hr")
+                        Text("\(db.party?.duration ?? 0)")
                             .font(.system(size: 20))
                             .fontWeight(.heavy)
                         Text("Duration")
@@ -53,30 +53,32 @@ struct HostView: View {
                 state = "Create"
                 print("end party")
                 spotify.disconnect()
+                db.shouldRun = false
                 Task {
                     await db.endParty()
                 }
             }, label: "End Party", background_color: .red)
             Spacer()
             Spacer()
-        }.onChange(of: db.party?.voteSkips,{
+        }/*.onChange(of: db.party?.voteSkips,{
             print("checking if skips surpass 50%")
             if Float(db.party!.voteSkips)/Float(db.party!.listeners) > 0.5 {
                 spotify.skipTrack()
                 db.incrementSkipped()
                 resetSkips()
             }
-        })
+        })*/
     }
     
-    func resetSkips() {
-            if let party = db.party {
-                    db.updateParty(name: party.name, data: [
-                        "voteSkips": 0
-                    ])
-            }
-            print("changed")
+    /*func resetSkips() {
+        if let party = db.party {
+                db.updateParty(name: party.name, data: [
+                    "voteSkips": 0
+                ])
         }
+        print("changed")
+    }
+     */
 }
 
 #Preview {

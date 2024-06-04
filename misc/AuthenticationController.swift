@@ -14,6 +14,7 @@ import FirebaseAuth
 
 @Observable class AuthenticationModel {
     var context = LAContext();
+    static let shared = AuthenticationModel()
     var authenticated: AuthenticationState = .loggedout
     fileprivate var currentNonce: String?
     var user: User?

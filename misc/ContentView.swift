@@ -14,6 +14,7 @@ struct ContentView: View {
     @State var musicViewHeight = 390
     @State var isHost: Bool = false
     @State var state = "Spotify"
+    @State var timer: Timer?
     var authModel: AuthenticationModel
     
     var body: some View {
@@ -26,7 +27,7 @@ struct ContentView: View {
                             .aspectRatio(contentMode: .fill)
                             .edgesIgnoringSafeArea(.all)
                             .blur(radius: 25)
-                    }else {
+                    }else if db.party?.image != nil {
                         AsyncImage(url: URL(string: "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))")) { image in
                             image
                                 .resizable()
@@ -37,6 +38,16 @@ struct ContentView: View {
                             //                        ProgressView()
                         }
                         
+                    } else {
+                        AsyncImage(url: URL(string: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228")) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .edgesIgnoringSafeArea(.all)
+                                .blur(radius: 25)
+                        } placeholder: {
+                            //                        ProgressView()
+                        }
                     }
                     Rectangle()
                         .aspectRatio(contentMode: .fill)
@@ -64,11 +75,15 @@ struct ContentView: View {
                 AuthView(model: authModel)
             }
         }.onChange(of: spotify.accessToken, handleChange)
+        
     }
     
     func handleChange(){
         print("Access Token: \(spotify.accessToken ?? String("none"))")
     }
+    
+    
+    
     
 }
 

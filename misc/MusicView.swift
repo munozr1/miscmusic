@@ -17,6 +17,11 @@ struct MusicView: View {
             VStack {
                 VStack{
                     HStack{
+                        Button {
+                            // invisible just to balance out the title
+                        } label: {
+                            Text(" ")
+                        }
                         Spacer()
                         Text(db.party?.name ?? "The Dog House")
                             .font(.system(size: 15, design: .monospaced))
@@ -49,7 +54,7 @@ struct MusicView: View {
                 
                 if showMusicView {
                     if spotify.currentTrackImage == nil{
-                        AsyncImage(url: URL(string: db.party?.image != nil ? "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))" : albumCoverImage)) { image in
+                        AsyncImage(url: URL(string: db.party != nil ? "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))" : albumCoverImage)) { image in
                             image
                                 .shadow(radius: 10)
                         } placeholder: {

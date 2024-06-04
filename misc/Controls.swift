@@ -64,7 +64,27 @@ struct Controls: View {
             
             Spacer()
             Spacer()
-        }.onChange(of: db.party?.currentTrack){ voted = false }
+        }
+        .onChange(of: db.party?.currentTrack){ voted = false }
+        .onChange(of: db.party?.voteSkips,{
+            if state != "Host" { return }
+            print("checking if skips surpass 50%")
+            if Float(db.party!.voteSkips)/Float(db.party!.listeners) > 0.5 {
+                spotify.skipTrack()
+                db.incrementSkipped()
+                resetSkips()
+            }
+        })
+       
+    }
+    
+    func resetSkips() {
+        if let party = db.party {
+                db.updateParty(name: party.name, data: [
+                    "voteSkips": 0
+                ])
+        }
+        print("changed")
     }
     
     func handleGuestSkip(s: Bool) {

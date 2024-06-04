@@ -24,6 +24,9 @@ struct CreatePartyView: View {
             Task {
                 await createNewParty()
             }
+            db.shouldRun = true
+            db.startTimer()
+            
         }, label: "Create", background_color: .green)
     }
     
