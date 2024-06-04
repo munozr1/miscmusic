@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct Controls: View {
     @ObservedObject var spotify = SpotifyController.shared
     var db = FirestoreController.shared
@@ -29,7 +27,6 @@ struct Controls: View {
             Spacer()
             HStack{
                 Button {
-//                    pause.toggle()
                     if spotify.currentTrackPaused {
                         spotify.resume()
                     }else{
@@ -52,9 +49,7 @@ struct Controls: View {
                 if state == "Host" {
                     spotify.skipTrack()
                 }else if state == "Guest"{
-//                    Task{
                     handleGuestSkip(s: true)
-//                    }
                 }
             }label :{
                 Image(systemName: !voted ? "forward.end" : "forward.end.fill")
@@ -69,7 +64,7 @@ struct Controls: View {
         .onChange(of: db.party?.voteSkips,{
             if state != "Host" { return }
             print("checking if skips surpass 50%")
-            if Float(db.party!.voteSkips)/Float(db.party!.listeners) > 0.5 {
+            if Float(db.party!.voteSkips)/Float(db.party!.listeners) > 0.45 {
                 spotify.skipTrack()
                 db.incrementSkipped()
                 resetSkips()

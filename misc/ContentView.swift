@@ -63,7 +63,6 @@ struct ContentView: View {
                     }
                     MusicView(showMusicView: $showMusicView)
                         .frame(width: 390)
-                        .transition(.move(edge: .bottom))
                     
                     Controls(state: $state)
                         .frame(width: 410)
@@ -75,6 +74,7 @@ struct ContentView: View {
                 AuthView(model: authModel)
             }
         }.onChange(of: spotify.accessToken, handleChange)
+            .ignoresSafeArea(.keyboard)
         
     }
     

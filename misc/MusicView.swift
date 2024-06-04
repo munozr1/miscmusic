@@ -37,7 +37,7 @@ struct MusicView: View {
                     .padding(.bottom, 15)
                     if showMusicView && spotify.appRemote.isConnected{
                         HStack {
-                            Text(spotify.currentTrackName ?? " ")
+                            Text(spotify.currentTrackName ?? "  ")
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
                             Spacer()

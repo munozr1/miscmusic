@@ -12,13 +12,21 @@ struct HomeView: View {
     @StateObject var db = FirestoreController.shared
     @State var party_code: String = ""
     @Binding var state: String
+    @State private var menu: Bool = false
     
     var body: some View {
         VStack{
             HStack{
-                Image(systemName: "person")
+                VStack{
+                    Button{
+                        menu.toggle()
+                    } label : {Image(systemName: "person")}
+                        .foregroundColor(.black)
+                        
+                }
+                .padding(.leading, 24)
                 Spacer()
-                Image(systemName: "gearshape")
+//                Image(systemName: "gearshape")
             }
             .padding(.top, 10)
             .frame(width: 350)
@@ -82,7 +90,36 @@ struct HomeView: View {
             Spacer()
             Spacer()
             Spacer()
-        }.onChange(of: spotify.appRemote.isConnected, handleChange)
+        }
+        .overlay(
+                    VStack {
+                        if menu {
+                            VStack {
+                                Button{
+                                    spotify.disconnect()
+                                    db.stopTimer()
+                                    db.resetListener()
+                                    AuthenticationModel.shared.signout()
+                                } label: {
+                                    Text("Sign out")
+                                        .padding(.top, 7)
+                                        .foregroundColor(.black)
+                                }
+                            }
+                            .frame(width: 70, height: 50)
+                            .background(.white)
+                            .clipShape(Menu())
+                            .cornerRadius(5)
+                            .shadow(radius: 2)
+                            .transition(.move(edge: .top))
+                            .animation(.easeInOut, value: menu)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .padding(.top, 50) // Adjust the padding as needed
+//                    .padding(.leading, 5)
+                )
+        .onChange(of: spotify.appRemote.isConnected, handleChange)
     }
     
     func handleChange(){

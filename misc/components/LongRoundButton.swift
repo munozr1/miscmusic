@@ -46,6 +46,7 @@ struct LongRoundButton: View {
 //        .padding()
         .background(background_color)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+//        .clipShape(Menu())
         .shadow(color: .gray, radius: 3, x: 0, y: 0)
     }
 }

@@ -56,7 +56,7 @@ struct SpotifyParty: Codable {
     func startTimer() {
         print("Starting Timer")
         //guard let host = party?.host else { print("No host") ; return }
-        guard let curr_user = AuthenticationModel.shared.user?.uid else {print("Not logged in") ; return }
+        guard (AuthenticationModel.shared.user?.uid) != nil else {print("Not logged in") ; return }
         //if host != curr_user { print("Not Host") ; return }
         
         timer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true){ _ in
@@ -201,10 +201,7 @@ struct SpotifyParty: Codable {
                     self.skipRate = Int((Float(self.party!.skipped) / Float(self.party!.played)) * 100)
                 }
                 print(self.party ?? "no party")
-//                if timer != nil && timer == true {
-//                    self.shouldRun = true;
-//                    self.startTimer()
-//                }
+
             } catch let error {
                 print("Error decoding party data: \(error)")
             }

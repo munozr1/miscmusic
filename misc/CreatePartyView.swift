@@ -12,22 +12,24 @@ struct CreatePartyView: View {
     @State var name: String = ""
     @Binding var state: String
     var body: some View {
-        TextField("Party Name", text: $name)
-            .multilineTextAlignment(.center)
-            .font(.title)
-            .frame(width: 250, height: 40)
-            .shadow(radius: 20)
-            .padding(.bottom)
-        
-        LongRoundButton(action: {
-            if name.isEmpty { return }
-            Task {
-                await createNewParty()
-            }
-            db.shouldRun = true
-            db.startTimer()
+        VStack{
+            TextField("Party Name", text: $name)
+                .multilineTextAlignment(.center)
+                .font(.title)
+                .frame(width: 250, height: 40)
+                .shadow(radius: 20)
+                .padding(.bottom)
             
-        }, label: "Create", background_color: .green)
+            LongRoundButton(action: {
+                if name.isEmpty { return }
+                Task {
+                    await createNewParty()
+                }
+                db.shouldRun = true
+                db.startTimer()
+                
+            }, label: "Create", background_color: .green)
+        }.ignoresSafeArea(.keyboard)
     }
     
     func createNewParty() async {
