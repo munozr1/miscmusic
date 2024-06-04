@@ -62,9 +62,11 @@ struct Controls: View {
         }
         .onChange(of: db.party?.currentTrack){ voted = false }
         .onChange(of: db.party?.voteSkips,{
-            if state != "Host" { return }
+            if db.isHost != true { return }
+            guard let votes = db.party?.voteSkips else { return }
+            guard let listeners = db.party?.listeners else { return }
             print("checking if skips surpass 50%")
-            if Float(db.party!.voteSkips)/Float(db.party!.listeners) > 0.45 {
+            if Float(votes)/Float(listeners) > 0.45 {
                 spotify.skipTrack()
                 db.incrementSkipped()
                 resetSkips()

@@ -23,6 +23,7 @@ struct SpotifyParty: Codable {
     var shouldRun: Bool = false;
     var party: SpotifyParty?
     var skipRate: Int = 0
+    var isHost: Bool = false
     
 
     private var listener: ListenerRegistration?
@@ -80,11 +81,12 @@ struct SpotifyParty: Codable {
     }
     
     func endParty() async {
+        guard let name = party?.name else { return }
         do {
             self.shouldRun = false;
-//            self.stopTimer()
-            try await db.collection("parties").document(party!.name).delete()
+            try await db.collection("parties").document(name).delete()
             self.party = nil
+            self.isHost = false
             print("Document successfully removed!")
         } catch {
           print("Error removing document: \(error)")
@@ -181,7 +183,7 @@ struct SpotifyParty: Codable {
     func resetListener(){
         decrementListener()
         listener?.remove()
-        party = nil
+//        party = nil
     }
 
     // Function to set up a listener for a party document

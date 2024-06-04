@@ -24,7 +24,7 @@ struct HomeView: View {
                         .foregroundColor(.black)
                         
                 }
-                .padding(.leading, 24)
+//                .padding(.leading, 24)
                 Spacer()
 //                Image(systemName: "gearshape")
             }
@@ -74,6 +74,8 @@ struct HomeView: View {
                 LongRoundButton(action: {
                     if !spotify.appRemote.isConnected {
                         spotify.connect()
+                    } else {
+                        state = "Create"
                     }
                 },icon: true ,label: "Sign in with Spotify", icon_name: "SpotifyLogo", system_icon: false)
                 Button{
@@ -96,9 +98,7 @@ struct HomeView: View {
                         if menu {
                             VStack {
                                 Button{
-                                    spotify.disconnect()
-                                    db.stopTimer()
-                                    db.resetListener()
+                                    state = "Spotify"
                                     AuthenticationModel.shared.signout()
                                 } label: {
                                     Text("Sign out")

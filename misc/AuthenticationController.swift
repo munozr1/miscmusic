@@ -29,6 +29,7 @@ import FirebaseAuth
             try Auth.auth().signOut()
             authenticated = .loggedout
             user = nil
+            
         } catch {
             print("Could not sign out: \(error.localizedDescription)")
         }

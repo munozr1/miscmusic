@@ -11,6 +11,9 @@ struct CreatePartyView: View {
     var db = FirestoreController.shared
     @State var name: String = ""
     @Binding var state: String
+    
+    
+    
     var body: some View {
         VStack{
             TextField("Party Name", text: $name)
@@ -27,9 +30,12 @@ struct CreatePartyView: View {
                 }
                 db.shouldRun = true
                 db.startTimer()
+                db.isHost = true
                 
             }, label: "Create", background_color: .green)
-        }.ignoresSafeArea(.keyboard)
+        }
+        .onAppear(perform: handleExistingParty)
+        .ignoresSafeArea(.keyboard)
     }
     
     func createNewParty() async {
@@ -45,6 +51,11 @@ struct CreatePartyView: View {
                 }
             }
         }
+    }
+    func handleExistingParty(){
+        guard let host = db.party?.host else { return }
+        guard let usr = AuthenticationModel.shared.user?.uid else { return }
+        if host == usr { state = "Host" }
     }
     
     
