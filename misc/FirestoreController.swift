@@ -7,6 +7,7 @@ struct SpotifyParty: Codable {
     var name: String
     var host: String
     var currentTrack: String
+    var artist: String
     var image: String
     var code: String
     var played: Int
@@ -39,7 +40,8 @@ struct SpotifyParty: Codable {
             "skipped": 0,
             "voteSkips": 0,
             "currentTrack": SpotifyController.shared.currentTrackName ?? "",
-            "image": String(SpotifyController.shared.currentTrackImageURI.split(separator: ":").last!),
+            "artist": SpotifyController.shared.currentTrackArtist ?? "",
+            "image": String(SpotifyController.shared.currentTrackImageURI.split(separator: ":").last!) ,
             "code": "1234",
             "duration": 0
         ] as [String : Any]
@@ -51,6 +53,20 @@ struct SpotifyParty: Codable {
                 self.listenToParty(name: name, timer: true)
                 completion(.success(()))
             }
+        }
+    }
+    
+    
+    func findParty(field: String ,val: String) async -> [QueryDocumentSnapshot]?  {
+        let query = db.collection("parties").whereField(field, isEqualTo: val)
+        do{
+            let res = try await query.getDocuments()
+            if res.documents.isEmpty { return nil }
+            return res.documents
+        }
+        catch{
+            print("err \(error)")
+            return nil
         }
     }
     

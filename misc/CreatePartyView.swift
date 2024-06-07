@@ -9,13 +9,16 @@ import SwiftUI
 
 struct CreatePartyView: View {
     var db = FirestoreController.shared
+    var spotify = SpotifyController.shared
     @State var name: String = ""
     @Binding var state: String
+    @State var err: String = ""
     
     
     
     var body: some View {
-        VStack{
+        VStack(alignment: .center){
+            Text(err).foregroundColor(.red)
             TextField("Party Name", text: $name)
                 .multilineTextAlignment(.center)
                 .font(.title)
@@ -33,6 +36,16 @@ struct CreatePartyView: View {
                 db.isHost = true
                 
             }, label: "Create", background_color: .green)
+            Button{
+                if spotify.appRemote.isConnected {
+                    spotify.disconnect()
+                }
+                state = "Join"
+            } label: {
+                Text("Join party instead")
+                    .font(.system(size: 15))
+                    .foregroundColor(.gray)
+            }
         }
         .onAppear(perform: handleExistingParty)
         .ignoresSafeArea(.keyboard)
@@ -52,7 +65,9 @@ struct CreatePartyView: View {
             }
         }
     }
+    
     func handleExistingParty(){
+        db.isHost = true
         guard let host = db.party?.host else { return }
         guard let usr = AuthenticationModel.shared.user?.uid else { return }
         if host == usr { state = "Host" }

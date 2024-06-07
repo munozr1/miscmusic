@@ -12,21 +12,26 @@ struct Controls: View {
     var db = FirestoreController.shared
     @State var voted: Bool = false
     @Binding var state: String
+    @Binding var showQueue: Bool
     var body: some View {
         HStack {
             Spacer()
             Spacer()
             Button{
                 print("show queue")
+                showQueue.toggle()
             } label:{
                 Image(systemName: "list.bullet")
                     .resizable()
-                    .frame(width: 20, height: 20)
+                    .frame(width: 27, height: 20)
                     .padding()
             }
             Spacer()
             HStack{
                 Button {
+                    if db.isHost && !spotify.appRemote.isConnected{
+                        spotify.connect()
+                    }
                     if spotify.currentTrackPaused {
                         spotify.resume()
                     }else{
@@ -95,5 +100,6 @@ struct Controls: View {
 
 #Preview {
     @State var h = "Host"
-    return Controls(state: $h)
+    @State var b = true
+    return Controls(state: $h, showQueue: $b)
 }

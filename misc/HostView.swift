@@ -13,6 +13,7 @@ struct HostView: View {
     @Binding var state: String
     var body: some View {
         VStack{
+            
             Spacer()
             VStack{
                 HStack{
@@ -50,7 +51,7 @@ struct HostView: View {
                 }.padding()
             }
             LongRoundButton(action: {
-                spotify.disconnect()
+                //spotify.disconnect()
                 db.shouldRun = false
                 Task {
                     await db.endParty()
@@ -59,7 +60,7 @@ struct HostView: View {
             }, label: "End Party", background_color: .red)
             Spacer()
             Spacer()
-        }
+        }// end outermost vstack
     }
     
     func readableDuration(from duration: Float) -> String {
@@ -79,6 +80,6 @@ struct HostView: View {
 }
 
 #Preview {
-    @State var s = "test"
-    return HostView(state: $s)
+    @State var s = "Host"
+    return HomeView(state: $s)
 }

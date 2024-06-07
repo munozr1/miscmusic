@@ -34,43 +34,50 @@ struct MusicView: View {
                         }
                         
                     }.foregroundColor(showMusicView ? .white : .gray)
-                    .padding(.bottom, 15)
-                    if showMusicView && spotify.appRemote.isConnected{
+                }.padding()
+                
+                if showMusicView {
+                    VStack{
                         HStack {
-                            Text(spotify.currentTrackName ?? "  ")
+                            Text(spotify.appRemote.isConnected ? spotify.currentTrackName ?? "Track Name" : db.party?.currentTrack ?? "Track Name")
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
                             Spacer()
-                        }
+                        }.padding(.leading)
+                            .foregroundColor(.white)
                         HStack {
-                            Text(spotify.currentTrackArtist ?? " ")
+                            Text(spotify.appRemote.isConnected ? spotify.currentTrackArtist ?? "Artist" : db.party?.artist ?? "Artist")
                                 .padding(.bottom, 50)
                                 .fontWeight(.semibold)
                             Spacer()
+                        }.padding(.leading)
+                            .foregroundColor(.white)
+                        HStack {
+                            
+                            
+                            if spotify.currentTrackImage == nil{
+                                AsyncImage(url: URL(string: db.party != nil ? "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))" : albumCoverImage)) { image in
+                                    image
+                                        .shadow(radius: 10)
+                                        .cornerRadius(10)
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                            }else{
+                                Image(uiImage: spotify.currentTrackImage!)
+                                    .shadow(radius: 10)
+                                    .cornerRadius(10)
+                            }
                         }
+                        
+                        Spacer()
                     }
-                    
-                }.foregroundColor(.white)
-                
-                if showMusicView {
-                    if spotify.currentTrackImage == nil{
-                        AsyncImage(url: URL(string: db.party != nil ? "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))" : albumCoverImage)) { image in
-                            image
-                                .shadow(radius: 10)
-                        } placeholder: {
-                            ProgressView()
-                        }
-                    }else{
-                        Image(uiImage: spotify.currentTrackImage!)
-                    }
-                    
-                    Spacer()
                 }
+                    
             }
-            .padding()
             .onChange(of: spotify.currentTrackURI, {
-                 handleTrackChange()
-            })
+                        handleTrackChange()
+                    })
         }
     }
     
