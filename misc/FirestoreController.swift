@@ -9,12 +9,13 @@ struct SpotifyParty: Codable {
     var currentTrack: String
     var artist: String
     var image: String
-    var code: String
     var played: Int
     var skipped: Int
     var listeners: Int
     var duration: Float
     var voteSkips: Int
+    var token: String
+    var queue: [String]
 }
 
 @Observable class FirestoreController: ObservableObject {
@@ -31,8 +32,11 @@ struct SpotifyParty: Codable {
 
     // Function to add a document without async
     func newParty(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let token = SpotifyController.shared.accessToken else { return }
         guard let uid = AuthenticationModel.shared.user?.uid else { return }
         let partyData = [
+            "queue": [],
+            "token": token,
             "name": name,
             "host": uid,
             "listeners": 0,
@@ -42,7 +46,6 @@ struct SpotifyParty: Codable {
             "currentTrack": SpotifyController.shared.currentTrackName ?? "",
             "artist": SpotifyController.shared.currentTrackArtist ?? "",
             "image": String(SpotifyController.shared.currentTrackImageURI.split(separator: ":").last!) ,
-            "code": "1234",
             "duration": 0
         ] as [String : Any]
         
@@ -94,6 +97,18 @@ struct SpotifyParty: Codable {
     
     func updateParty(name: String, data: [String: Any]){
         db.collection("parties").document(name).updateData(data) 
+    }
+    
+    func addToQueue(party: String, track: String){
+        db.collection("parties").document(party).updateData([
+            "queue": FieldValue.arrayUnion([track])
+        ])
+    }
+    
+    func removeToQueue(party: String, track: String){
+        db.collection("parties").document(party).updateData([
+            "queue": FieldValue.arrayRemove([track])
+        ])
     }
     
     func endParty() async {

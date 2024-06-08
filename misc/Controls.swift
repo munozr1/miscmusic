@@ -77,6 +77,14 @@ struct Controls: View {
                 resetSkips()
             }
         })
+        .onChange(of: db.party?.queue, {
+            guard let tracks = db.party?.queue else { return }
+            guard let api = SpotifyController.shared.appRemote.playerAPI else { return }
+            for track in tracks {
+                api.enqueueTrackUri(track)
+                db.removeToQueue(party: db.party!.name, track: track)
+            }
+        })
        
     }
     

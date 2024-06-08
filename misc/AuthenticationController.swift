@@ -11,6 +11,7 @@ import Observation
 import AuthenticationServices
 import CryptoKit
 import FirebaseAuth
+//import UIKit
 
 @Observable class AuthenticationModel {
     var context = LAContext();
@@ -80,10 +81,51 @@ import FirebaseAuth
     }
     
     
-    func AuthenticateWithGoogle(){
+    func authenticateWithGoogle(){
         print("TODO: implement google auth")
         authenticated = .loggedin
     }
+    
+
+//    func spotifyAuthPCKE() {
+//        // Generate code verifier and code challenge
+//        let codeVerifier = randomNonceString(length: 64)
+//        let hash = sha256(codeVerifier)
+//        let codeChallenge = base64encode(hash)
+//        
+//        // Save codeVerifier to local storage for later use
+//        UserDefaults.standard.set(codeVerifier, forKey: "code_verifier")
+//        
+//        // Set up the URL components
+//        var components = URLComponents()
+//        components.scheme = "https"
+//        components.host = "accounts.spotify.com"
+//        components.path = "/authorize"
+//        
+//        // Add query parameters
+//        components.queryItems = [
+//            URLQueryItem(name: "client_id", value: Secrets.SpotifyClientID),
+//            URLQueryItem(name: "response_type", value: "code"),
+//            URLQueryItem(name: "redirect_uri", value: Secrets.SpotifyRedirectURL),
+//            URLQueryItem(name: "scope", value: "user-read-private"),
+//            URLQueryItem(name: "code_challenge_method", value: "S256"),
+//            URLQueryItem(name: "code_challenge", value: codeChallenge)
+//        ]
+//        
+//        // Create the URL
+//        guard let url = components.url else {
+//            print("Invalid URL components.")
+//            return
+//        }
+//        
+//        // Open the URL in Safari
+//        UIApplication.shared.open(url, options: [:], completionHandler: {_ in 
+//            print("Completion Handler")
+//        })
+//    }
+
+
+    
     
     private func randomNonceString(length: Int = 32) -> String {
       precondition(length > 0)
@@ -115,6 +157,20 @@ import FirebaseAuth
       }.joined()
 
       return hashString
+    }
+    
+    func base64encode(_ input: String) -> String {
+        guard let inputData = input.data(using: .utf8) else {
+            return ""
+        }
+        
+        let base64Encoded = inputData.base64EncodedString()
+        let safeBase64Encoded = base64Encoded
+            .replacingOccurrences(of: "=", with: "")
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+        
+        return safeBase64Encoded
     }
 
         

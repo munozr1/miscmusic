@@ -13,19 +13,17 @@ struct MusicView: View {
     var albumCoverImage: String = "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228"
     @Binding var showMusicView: Bool
     var body: some View {
-        ZStack{
-            VStack {
-                VStack{
+        VStack(alignment: .center){
                     HStack{
                         Button {
                             // invisible just to balance out the title
                         } label: {
                             Text(" ")
                         }
-                        Spacer()
+//                        Spacer()
                         Text(db.party?.name ?? "The Dog House")
                             .font(.system(size: 15, design: .monospaced))
-                        Spacer()
+//                        Spacer()
                         Button {
                             showMusicView.toggle()
                         } label: {
@@ -34,27 +32,22 @@ struct MusicView: View {
                         }
                         
                     }.foregroundColor(showMusicView ? .white : .gray)
-                }.padding()
                 
                 if showMusicView {
-                    VStack{
-                        HStack {
-                            Text(spotify.appRemote.isConnected ? spotify.currentTrackName ?? "Track Name" : db.party?.currentTrack ?? "Track Name")
+                    VStack(alignment: .leading){
+                        HStack{
+                            Text(spotify.appRemote.isConnected ? spotify.currentTrackName ?? "Super Long Long Track Name" : db.party?.currentTrack ?? "Super Long Track Name")
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
-                            Spacer()
                         }.padding(.leading)
                             .foregroundColor(.white)
                         HStack {
                             Text(spotify.appRemote.isConnected ? spotify.currentTrackArtist ?? "Artist" : db.party?.artist ?? "Artist")
-                                .padding(.bottom, 50)
                                 .fontWeight(.semibold)
-                            Spacer()
                         }.padding(.leading)
                             .foregroundColor(.white)
                         HStack {
-                            
-                            
+                            Spacer()
                             if spotify.currentTrackImage == nil{
                                 AsyncImage(url: URL(string: db.party != nil ? "https://i.scdn.co/image/\(String(db.party!.image.split(separator: ":").last!))" : albumCoverImage)) { image in
                                     image
@@ -68,17 +61,26 @@ struct MusicView: View {
                                     .shadow(radius: 10)
                                     .cornerRadius(10)
                             }
-                        }
+                            Spacer()
+                        }.padding(.top)
                         
                         Spacer()
-                    }
-                }
+                    }.padding().gesture(
+                        DragGesture().onEnded { gesture in
+                            if gesture.translation.height < 0 {
+                                // Swipe Up
+                            } else if gesture.translation.height > 0 {
+                                // Swipe Down
+                                showMusicView = false
+                            }
+                        }
+                    )
+                }// end if showMusic
                     
             }
-            .onChange(of: spotify.currentTrackURI, {
-                        handleTrackChange()
-                    })
-        }
+            .onChange(of: spotify.currentTrackURI, {handleTrackChange()})
+            
+        
     }
     
     func handleTrackChange () {

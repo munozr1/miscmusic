@@ -12,6 +12,9 @@ struct SideMenuView: View {
     
     @Binding var presentSideMenu: Bool
     @Binding var state: String
+    @State private var isConfirming = false
+    @State private var dialogDetail: String?
+    
     var body: some View {
         HStack {
             
@@ -26,21 +29,35 @@ struct SideMenuView: View {
                         AuthenticationModel.shared.signout()
                         presentSideMenu.toggle()
                     }
-                    RowView(  title: "Delete Account") {
-                        guard let user = Auth.auth().currentUser else { return }
+                    RowView(  title: "Delete Account", color: .red) {
+                        dialogDetail = "Delete Account"
+                        isConfirming = true
 
-                        user.delete { error in
-                          if let error = error {
-                              print("\(error)")
-                          } else {
-                              print("Account deleted.")
-                              state = "Spotify"
-                              AuthenticationModel.shared.authenticated = .loggedout
-                          }
-                        }
-                        presentSideMenu.toggle()
                     }
-                    
+                    .confirmationDialog(
+                                "Are you sure you want permanently delete your account?",
+                                isPresented: $isConfirming, presenting: dialogDetail
+                            ) { detail in
+                                Button {
+                                    // Handle confirm action
+                                    guard let user = Auth.auth().currentUser else { return }
+                                    user.delete { error in
+                                      if let error = error {
+                                          print("\(error)")
+                                      } else {
+                                          print("Account deleted.")
+                                          state = "Spotify"
+                                          AuthenticationModel.shared.authenticated = .loggedout
+                                      }
+                                    }
+                                    presentSideMenu.toggle()
+                                } label: {
+                                    Text("\(detail)")
+                                }
+                                Button("Cancel", role: .cancel) {
+                                    dialogDetail = nil
+                                }
+                            }
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 100, leading: 20, bottom: 0, trailing: 0))
@@ -54,7 +71,7 @@ struct SideMenuView: View {
         .background(.clear)
     }
     
-    func RowView(  title: String, hideDivider: Bool = false, action: @escaping (()->())) -> some View{
+    func RowView(  title: String, color: Color = .black, hideDivider: Bool = false, action: @escaping (()->())) -> some View{
         Button{
             action()
         } label: {
@@ -63,7 +80,7 @@ struct SideMenuView: View {
                     Text(title)
                         .font(.system(size: 14, weight: .regular))
                         .padding()
-                        .foregroundColor(.black)
+                        .foregroundColor(color)
                     Spacer()
                 }
             }

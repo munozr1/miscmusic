@@ -8,6 +8,7 @@
 import SwiftUI
 import SpotifyiOS
 import Combine
+import Gzip
 
 class SpotifyController: NSObject, ObservableObject {
     static let shared = SpotifyController()
@@ -52,6 +53,43 @@ class SpotifyController: NSObject, ObservableObject {
         appRemote.delegate = self
         return appRemote
     }()
+    
+    func search(query: String, token: String ) async throws -> SpotifySearchResponse {
+        // Replace with your actual Bearer token
+        
+        
+        // Encode the query to be URL-safe
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            throw URLError(.badURL)
+        }
+        
+        // Construct the URL
+        let urlString = "https://api.spotify.com/v1/search?q=\(encodedQuery)&type=track"
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        
+        // Create the URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        // Perform the network request
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        // Check for valid response
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw URLError(.badServerResponse)
+        }
+        
+        print("Response Headers: \(httpResponse.allHeaderFields)")
+        print("Data: \(data)")
+
+   
+        let searchResult = try JSONDecoder().decode(SpotifySearchResponse.self, from: data)
+        return searchResult
+    }
     
     func setAccessToken(from url: URL) {
         let parameters = appRemote.authorizationParameters(from: url)
@@ -160,3 +198,4 @@ extension SpotifyController: SPTAppRemotePlayerStateDelegate {
         fetchImage()
     }
 }
+

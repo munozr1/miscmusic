@@ -19,25 +19,31 @@ struct QueueView: View {
     @FocusState var searchIsFocused: Bool
     @State var expand: Bool = false
     @State var input: String = ""
-    var tracks: [Track] = [
-        Track(id: Int(0),title: "Wonderwall - Remastered", artist: "Oasis", img: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" ),
-        Track(id: Int(1),title: "Cool Kids", artist: "Echosmith", img: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" ),
-        Track(id: Int(2),title: "Compartir- Remastered", artist: "Carla Morrison", img: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" ),
-        Track(id: Int(3),title: "Compartir- Remastered", artist: "Carla Morrison", img: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" ),
-    ]
-    
+    @State var tracks: SpotifySearchResponse?
+    @State private var selectedTracks: Set<String> = []
+
     
     //MARK: Start View
     var body: some View {
-        ZStack(alignment: .bottom){
+        VStack{
             if (showQueue){
                 VStack(alignment: .leading){
                     HStack{
-                        //TODO: the search placeholder should be the users most searched location / category
                         TextField("Search Track Name", text: $input)
                             .focused($searchIsFocused)
                             .onSubmit {
                                 handleInputChange()
+                                Task {
+                                    do{
+                                        guard let token = FirestoreController.shared.party?.token else { return }
+                                        let res = try await SpotifyController.shared.search(query: input, token: token)
+                                        tracks = res
+                                        selectedTracks = []
+                                        print("Search res = \(res)")
+                                    } catch {
+                                        print("Search Error: \(error)")
+                                    }
+                                }
                             }
                             .textInputAutocapitalization(.never)
                             .disableAutocorrection(true)
@@ -56,31 +62,49 @@ struct QueueView: View {
                         
                     }.padding()
                     
-                    //MARK: tracks list
+// Mark: - tracks list
                     ScrollView{
                         VStack{
-                            ForEach(tracks){ track in
-                                HStack{
-                                    AsyncImage(url: URL(string: track.img)) {
-                                        image in
-                                        image.image?.resizable()
-                                            .frame(width: 70, height: 70)
-                                            .cornerRadius(5)
-                                    }
-                                    VStack(alignment: .leading){
-                                        Text(truncate(str: track.title))
-                                            .font(.system(size: 16))
-                                        Text(track.artist)
-                                            .font(.system(size: 12))
-                                    }
-                                    Spacer()
-                                    VStack(alignment: .center){
-                                        Image(systemName: "line.3.horizontal")
-                                            .resizable()
-                                            .foregroundColor(.primary)
-                                            .frame(width: 22, height: 15)
-                                    }
-                                }.padding()
+                            if let items = tracks?.tracks.items {
+                                ForEach(items, id: \.href){ track in
+                                    HStack{
+                                        AsyncImage(url: URL(string: track.album.images[0].url)) {
+                                            image in
+                                            image.image?.resizable()
+                                                .frame(width: 70, height: 70)
+                                                .cornerRadius(5)
+                                        }
+                                        VStack(alignment: .leading){
+                                            Text(truncate(str: track.name))
+                                                .font(.system(size: 16))
+                                            Text(track.artists[0].name)
+                                                .font(.system(size: 12))
+                                        }
+                                        Spacer()
+                                        VStack(alignment: .center){
+                                            Image(systemName: selectedTracks.contains(track.href) ? "checkmark" : "plus")
+                                                .resizable()
+                                                .foregroundColor(selectedTracks.contains(track.href) ? .green : .primary)
+                                                .frame(width: 17, height: 15)
+                                                .contentTransition(.symbolEffect(.replace))
+//                                                .transition(.scale)
+                                        }
+                                        .onTapGesture {
+                                            withAnimation{
+                                                if !selectedTracks.contains(track.href) {
+                                                    selectedTracks.insert(track.href)
+                                                    if FirestoreController.shared.isHost {
+                                                        SpotifyController.shared.appRemote.playerAPI?.enqueueTrackUri(track.uri)
+                                                    }
+                                                    else{
+                                                        FirestoreController.shared.addToQueue(party: FirestoreController.shared.party!.name, track: track.uri)
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }.padding()
+                                }
                             }
                         }
                     }.ignoresSafeArea(.keyboard)
@@ -88,10 +112,11 @@ struct QueueView: View {
                 .background()
                 .clipShape(TopRoundedCorners(radius: 25))
                 .shadow(radius: 10)
-                .frame(maxWidth: .infinity, maxHeight: 500)
+                .frame(maxWidth: .infinity)
                 .transition(.move(edge: .bottom))
             }
-        }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        }
+        .animation(.spring, value: showQueue)
             .gesture(
                 DragGesture().onEnded { gesture in
                     if gesture.translation.height < 0 {
@@ -102,8 +127,6 @@ struct QueueView: View {
                     }
                 }
             )
-            .animation(.easeInOut, value: showQueue)
-            .ignoresSafeArea()
     }
     
     func truncate(str: String) -> String {
@@ -124,3 +147,7 @@ struct QueueView: View {
     @State var sq = true
     return QueueView(showQueue: $sq)
 }
+//
+//#Preview {
+//    ContentView(spotify: SpotifyController(), authModel: AuthenticationModel())
+//}
