@@ -37,6 +37,11 @@ struct SpotifyAuthView: View {
                     .foregroundColor(.gray)
             }
         }// end outermost vstack
+        .onAppear(perform: {
+            if(AuthenticationModel.shared.demo) {
+                state = "Create"
+            }
+        })
     }// end body
     
 } // end view

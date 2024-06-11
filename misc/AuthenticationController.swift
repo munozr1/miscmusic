@@ -14,11 +14,12 @@ import FirebaseAuth
 //import UIKit
 
 @Observable class AuthenticationModel {
-    var context = LAContext();
     static let shared = AuthenticationModel()
-    var authenticated: AuthenticationState = .loggedout
     fileprivate var currentNonce: String?
+    var context = LAContext();
+    var authenticated: AuthenticationState = .loggedout
     var user: User?
+    var demo: Bool = true
 
     
     enum AuthenticationState {
