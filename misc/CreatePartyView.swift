@@ -29,13 +29,17 @@ struct CreatePartyView: View {
             LongRoundButton(action: {
                 if name.isEmpty { return }
                 Task {
+                    if let _ = await db.findParty(field: "name", val: name) {
+                        err = "Name Taken"
+                        return
+                    }
                     await createNewParty()
+                    db.shouldRun = true
+                    db.startTimer()
+                    db.isHost = true
                 }
-                db.shouldRun = true
-                db.startTimer()
-                db.isHost = true
-                
             }, label: "Create", background_color: .green)
+
             Button{
                 if spotify.appRemote.isConnected {
                     spotify.disconnect()

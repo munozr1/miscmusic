@@ -56,6 +56,7 @@ struct JoinPartyView: View {
     func joinParty() async {
         db.listenToParty(name: name)
         db.incrementListener(name: name)
+        spotify.disconnect()
         state = "Guest"
     }
     

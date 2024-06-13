@@ -36,7 +36,7 @@ struct MusicView: View {
                 if showMusicView {
                     VStack(alignment: .leading){
                         HStack{
-                            Text(spotify.appRemote.isConnected ? spotify.currentTrackName ?? "Super Long Long Track Name" : db.party?.currentTrack ?? "Super Long Track Name")
+                            Text(spotify.appRemote.isConnected ? spotify.currentTrackName ?? "Track Name" : db.party?.currentTrack ?? "Track Name")
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
                         }.padding(.leading)

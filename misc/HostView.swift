@@ -57,6 +57,13 @@ struct HostView: View {
                     await db.endParty()
                     state = "Create"
                 }
+                spotify.currentTrackURI = nil
+                spotify.currentTrackImageURI = "spotify:image:ab67616d00001e02f1adf3da211f271d27bd4c8a"
+                spotify.currentTrackName = nil
+                spotify.currentTrackArtist = nil
+                spotify.currentTrackDuration = nil
+                spotify.currentTrackImage = nil
+                spotify.currentTrackPaused = false
             }, label: "End Party", background_color: .red)
             Spacer()
             Spacer()

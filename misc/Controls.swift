@@ -13,13 +13,16 @@ struct Controls: View {
     @State var voted: Bool = false
     @Binding var state: String
     @Binding var showQueue: Bool
+    @State var showAlert: Bool = false
+    @State var alertMessage: any StringProtocol = ""
     var body: some View {
         HStack {
             Spacer()
             Spacer()
             Button{
                 print("show queue")
-                showQueue.toggle()
+                if(db.party == nil) {showAlert.toggle()}
+                else {showQueue.toggle()}
             } label:{
                 Image(systemName: "list.bullet")
                     .resizable()
@@ -29,6 +32,8 @@ struct Controls: View {
             Spacer()
             HStack{
                 Button {
+                    
+                    if(db.party == nil) {showAlert.toggle(); return}
                     if db.isHost && !spotify.appRemote.isConnected{
                         spotify.connect()
                     }
@@ -51,6 +56,7 @@ struct Controls: View {
             Spacer()
             
             Button{
+                if(db.party == nil) {showAlert.toggle(); return}
                 if state == "Host" {
                     spotify.skipTrack()
                 }else if state == "Guest"{
@@ -65,6 +71,7 @@ struct Controls: View {
             Spacer()
             Spacer()
         }
+        .alert("Must Host or Join party first", isPresented: $showAlert, actions: {})
         .onChange(of: db.party?.currentTrack){ voted = false }
         .onChange(of: db.party?.voteSkips,{
             if db.isHost != true { return }
@@ -98,11 +105,11 @@ struct Controls: View {
     }
     
     func handleGuestSkip(s: Bool) {
-        if (db.party != nil) {
+        if (db.party != nil && !voted) {
             db.voteToSkip()
             voted = true
         }
-        print("changed")
+        //else if(db.party != nil && voted){ voted = false}
     }
 }
 

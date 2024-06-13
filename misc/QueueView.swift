@@ -35,11 +35,16 @@ struct QueueView: View {
                                 handleInputChange()
                                 Task {
                                     do{
-                                        guard let token = FirestoreController.shared.party?.token else { return }
-                                        let res = try await SpotifyController.shared.search(query: input, token: token)
-                                        tracks = res
-                                        selectedTracks = []
-                                        print("Search res = \(res)")
+                                        if(!AuthenticationModel.shared.demo){
+                                            guard let token = FirestoreController.shared.party?.token else { return }
+                                            let res = try await SpotifyController.shared.search(query: input, token: token)
+                                            tracks = res
+                                            selectedTracks = []
+                                            print("Search res = \(res)")
+                                        }else{
+                                            selectedTracks = []
+                                            tracks = demoTracks
+                                        }
                                     } catch {
                                         print("Search Error: \(error)")
                                     }

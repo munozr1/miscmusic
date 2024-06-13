@@ -32,19 +32,18 @@ struct SpotifyParty: Codable {
 
     // Function to add a document without async
     func newParty(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let token = SpotifyController.shared.accessToken else { return }
         guard let uid = AuthenticationModel.shared.user?.uid else { return }
         let partyData = [
             "queue": [],
-            "token": token,
+            "token": SpotifyController.shared.accessToken ?? "No Token",
             "name": name,
             "host": uid,
             "listeners": 0,
             "played": 0,
             "skipped": 0,
             "voteSkips": 0,
-            "currentTrack": SpotifyController.shared.currentTrackName ?? "",
-            "artist": SpotifyController.shared.currentTrackArtist ?? "",
+            "currentTrack": SpotifyController.shared.currentTrackName ?? "I Fall Apart",
+            "artist": SpotifyController.shared.currentTrackArtist ?? "Post Malone",
             "image": String(SpotifyController.shared.currentTrackImageURI.split(separator: ":").last!) ,
             "duration": 0
         ] as [String : Any]
@@ -197,8 +196,10 @@ struct SpotifyParty: Codable {
     }
 
     func decrementListener() {
-        if(party?.name == nil) { return }
-        let partyRef = db.collection("parties").document(party!.name)
+        guard let name = party?.name else {return}
+        guard let guests = party?.listeners else {return}
+        if(guests <= 0) {return}
+        let partyRef = db.collection("parties").document(name)
 
         partyRef.updateData([
             "listeners": FieldValue.increment(Int64(-1))
@@ -214,7 +215,7 @@ struct SpotifyParty: Codable {
     func resetListener(){
         decrementListener()
         listener?.remove()
-//        party = nil
+        party = nil
     }
 
     // Function to set up a listener for a party document

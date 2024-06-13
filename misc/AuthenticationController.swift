@@ -19,7 +19,7 @@ import FirebaseAuth
     var context = LAContext();
     var authenticated: AuthenticationState = .loggedout
     var user: User?
-    var demo: Bool = true
+    var demo: Bool = false
 
     
     enum AuthenticationState {

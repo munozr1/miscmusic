@@ -17,7 +17,7 @@ class SpotifyController: NSObject, ObservableObject {
     var accessToken: String? = nil
     var playURI = ""
     @Published var currentTrackURI: String?
-    @Published var currentTrackImageURI: String = "spotify:image:ab67616d00001e02ff9ca10b55ce82ae553c8228"
+    @Published var currentTrackImageURI: String = "spotify:image:ab67616d00001e02f1adf3da211f271d27bd4c8a" //
     @Published var currentTrackName: String?
     @Published var currentTrackArtist: String?
     @Published var currentTrackDuration: Int?
