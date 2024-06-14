@@ -1,5 +1,5 @@
 //
-//  CreatePartyView.swift
+//  JoinPartyView.swift
 //  misc
 //
 //  Created by Rodrigo Munoz on 5/18/24.
@@ -12,9 +12,7 @@ struct JoinPartyView: View {
     var spotify = SpotifyController.shared
     @State var name: String = ""
     @Binding var state: String
-    @State var err: String = " "
-    
-    
+    @State var err: String = ""
     
     var body: some View {
         VStack(alignment: .center){

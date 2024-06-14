@@ -36,8 +36,8 @@ struct LongRoundButton: View {
                 }
                 Text(label).bold()
             }
-            .padding(.leading, icon ? 30 : 0)
-//            .padding(.trailing, 30)
+            .padding(.leading, icon ? 30 : 10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .shadow(radius: 10)
         }
         .frame(width: 300, height: 50)

@@ -84,9 +84,10 @@ struct MusicView: View {
     }
     
     func handleTrackChange () {
+        guard let track = spotify.currentTrackName else {return}
             if let party = db.party {
                  db.updateParty(name: party.name, data: [
-                        "currentTrack": spotify.currentTrackName!,
+                        "currentTrack": track,
                         "image": spotify.currentTrackImageURI
                     ])
                 db.incrementPlayed()

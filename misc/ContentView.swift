@@ -38,14 +38,10 @@ struct ContentView: View {
                             } placeholder: {}
                         }
                     Rectangle()
-//                            .aspectRatio(contentMode: .fill)
-//                            .edgesIgnoringSafeArea(.all)
                             .foregroundColor(.gray)
                             .opacity(0.3)
                             .ignoresSafeArea()
-//                    }.transition(.move(edge: .bottom))
                 }// END If showMusicView
-                
 //                ZStack{
                     VStack(alignment: .center) {
                         if !showMusicView{
@@ -73,7 +69,6 @@ struct ContentView: View {
                             .foregroundColor(showMusicView ? .white : .gray)
                             .padding(.bottom, 15)
                     }
-//                }
                 
             }// END If Auth
             else{
@@ -83,7 +78,6 @@ struct ContentView: View {
             SideMenu(isShowing: $menu, content: AnyView(SideMenuView(presentSideMenu: $menu, state: $state)))
             
         }// END ZStack
-//        .frame(maxWidth: 393)
         .animation(.easeInOut, value: showMusicView)
         .ignoresSafeArea(.keyboard)
         .onChange(of: spotify.accessToken, handleChange)

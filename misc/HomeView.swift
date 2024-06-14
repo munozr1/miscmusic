@@ -30,7 +30,6 @@ struct HomeView: View {
                     SpotifyAuthView(state: $state)
                 default:
                     HostView(state: $state)
-                    
                 }
             }
             .onChange(of: spotify.appRemote.isConnected, handleChange)

@@ -14,11 +14,9 @@ struct CreatePartyView: View {
     @Binding var state: String
     @State var err: String = ""
     
-    
-    
     var body: some View {
+        Text(err).foregroundColor(.red)
         VStack(alignment: .center){
-            Text(err).foregroundColor(.red)
             TextField("Party Name", text: $name)
                 .multilineTextAlignment(.center)
                 .font(.title)
@@ -51,8 +49,8 @@ struct CreatePartyView: View {
                     .foregroundColor(.gray)
             }
         }
-        .onAppear(perform: handleExistingParty)
         .ignoresSafeArea(.keyboard)
+        .onAppear(perform: handleExistingParty)
     }
     
     func createNewParty() async {
