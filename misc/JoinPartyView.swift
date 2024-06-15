@@ -25,6 +25,7 @@ struct JoinPartyView: View {
                 .padding(.bottom)
             
             LongRoundButton(action: {
+                //adding cuz i need it
                 if name.isEmpty { return }
                 Task{
                     print("Finding: \(name)")
