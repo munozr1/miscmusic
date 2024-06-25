@@ -87,45 +87,6 @@ import FirebaseAuth
         authenticated = .loggedin
     }
     
-
-//    func spotifyAuthPCKE() {
-//        // Generate code verifier and code challenge
-//        let codeVerifier = randomNonceString(length: 64)
-//        let hash = sha256(codeVerifier)
-//        let codeChallenge = base64encode(hash)
-//        
-//        // Save codeVerifier to local storage for later use
-//        UserDefaults.standard.set(codeVerifier, forKey: "code_verifier")
-//        
-//        // Set up the URL components
-//        var components = URLComponents()
-//        components.scheme = "https"
-//        components.host = "accounts.spotify.com"
-//        components.path = "/authorize"
-//        
-//        // Add query parameters
-//        components.queryItems = [
-//            URLQueryItem(name: "client_id", value: Secrets.SpotifyClientID),
-//            URLQueryItem(name: "response_type", value: "code"),
-//            URLQueryItem(name: "redirect_uri", value: Secrets.SpotifyRedirectURL),
-//            URLQueryItem(name: "scope", value: "user-read-private"),
-//            URLQueryItem(name: "code_challenge_method", value: "S256"),
-//            URLQueryItem(name: "code_challenge", value: codeChallenge)
-//        ]
-//        
-//        // Create the URL
-//        guard let url = components.url else {
-//            print("Invalid URL components.")
-//            return
-//        }
-//        
-//        // Open the URL in Safari
-//        UIApplication.shared.open(url, options: [:], completionHandler: {_ in 
-//            print("Completion Handler")
-//        })
-//    }
-
-
     
     
     private func randomNonceString(length: Int = 32) -> String {

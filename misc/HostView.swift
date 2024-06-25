@@ -11,6 +11,7 @@ struct HostView: View {
     var db = FirestoreController.shared
     @ObservedObject var spotify = SpotifyController.shared
     @Binding var state: String
+    @State private var reconnect: Bool = false
     var body: some View {
         VStack{
             
@@ -65,9 +66,18 @@ struct HostView: View {
                 spotify.currentTrackImage = nil
                 spotify.currentTrackPaused = false
             }, label: "End Party", background_color: .red)
+            if(reconnect){
+                LongRoundButton(action: {
+                    spotify.connect()
+                },icon: true ,label: "Sign in with Spotify", icon_name: "SpotifyLogo", system_icon: false)
+            }
             Spacer()
             Spacer()
         }// end outermost vstack
+        .onChange(of: spotify.appRemote.isConnected, {
+            if(!spotify.appRemote.isConnected) {reconnect = true}
+            else {reconnect = false}
+        })
     }
     
     func readableDuration(from duration: Float) -> String {

@@ -49,8 +49,13 @@ struct CreatePartyView: View {
                     .foregroundColor(.gray)
             }
         }
+        .onAppear(perform: {
+            print("Create Party View appeared")
+            Task{
+                await handleExistingParty()
+            }
+        })
         .ignoresSafeArea(.keyboard)
-        .onAppear(perform: handleExistingParty)
     }
     
     func createNewParty() async {
@@ -68,11 +73,26 @@ struct CreatePartyView: View {
         }
     }
     
-    func handleExistingParty(){
+    func handleExistingParty() async {
+        print("handleExistingParty()")
         db.isHost = true
-        guard let host = db.party?.host else { return }
-        guard let usr = AuthenticationModel.shared.user?.uid else { return }
-        if host == usr { state = "Host" }
+        //guard let host = db.party?.host else { return }
+        //if host == usr { state = "Host" }
+        guard let uid = AuthenticationModel.shared.user?.uid else {return}
+        guard let documents = await db.findParty(field: "host", val: uid) else { print("No existing parties found");return}
+        if let firstDocument = documents.first {
+            do {
+                let party = try firstDocument.data(as: SpotifyParty.self)
+                db.listenToParty(name: party.name)
+                state = "Host"
+                print("The first party name is: \(party.name)")
+            } catch {
+                print("Error decoding party: \(error)")
+            }
+        } else {
+            print("No documents in the result.")
+        }
+        
     }
     
     

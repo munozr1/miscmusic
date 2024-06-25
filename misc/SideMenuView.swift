@@ -59,11 +59,12 @@ struct SideMenuView: View {
                                     dialogDetail = nil
                                 }
                             }
-                    RowView(  title: "Demo Mode", color: .gray) {
+                    /*RowView(  title: "Demo Mode", color: .gray) {
                         AuthenticationModel.shared.demo.toggle()
                         state = "Create"
                         presentSideMenu.toggle()
                     }
+                     */
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 100, leading: 20, bottom: 0, trailing: 0))

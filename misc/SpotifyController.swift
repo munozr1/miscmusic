@@ -23,7 +23,7 @@ class SpotifyController: NSObject, ObservableObject {
     @Published var currentTrackDuration: Int?
     @Published var currentTrackImage: UIImage?
     @Published var currentTrackPaused: Bool = true
-    
+
     private var connectCancellable: AnyCancellable?
     private var disconnectCancellable: AnyCancellable?
     
@@ -111,8 +111,9 @@ class SpotifyController: NSObject, ObservableObject {
         }
         appRemote.connect()
         objectWillChange.send()
-
     }
+    
+    
     
     func disconnect() {
         if appRemote.isConnected {
@@ -182,7 +183,7 @@ extension SpotifyController: SPTAppRemoteDelegate {
     }
     
     func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {
-        print("disconnected")
+        print("disconnected: \(String(describing: error))")
     }
 }
 
