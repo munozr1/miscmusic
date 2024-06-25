@@ -23,6 +23,7 @@ class SpotifyController: NSObject, ObservableObject {
     @Published var currentTrackDuration: Int?
     @Published var currentTrackImage: UIImage?
     @Published var currentTrackPaused: Bool = true
+    @Published var connected: Bool = false
 
     private var connectCancellable: AnyCancellable?
     private var disconnectCancellable: AnyCancellable?
@@ -105,13 +106,33 @@ class SpotifyController: NSObject, ObservableObject {
     func connect() {
         guard let _ = self.appRemote.connectionParameters.accessToken else {
             self.appRemote.authorizeAndPlayURI("")
+            print("Already Authorized")
             objectWillChange.send()
 
             return
         }
+        print("connect() => appRemote.connect()")
         appRemote.connect()
+        print("connect() => ObjectWillChange.send()")
         objectWillChange.send()
     }
+    
+    func reconnect() {
+        guard let _ = self.appRemote.connectionParameters.accessToken else {
+            self.appRemote.authorizeAndPlayURI("")
+            print("Already Authorized")
+            objectWillChange.send()
+
+            return
+        }
+        print("connect() => appRemote.connect()")
+        //self.appRemote.connectionParameters.accessToken = self.accessToken
+        self.appRemote.authorizeAndPlayURI("")
+        appRemote.connect()
+        print("connect() => ObjectWillChange.send()")
+        objectWillChange.send()
+    }
+
     
     
     
@@ -170,6 +191,7 @@ class SpotifyController: NSObject, ObservableObject {
 extension SpotifyController: SPTAppRemoteDelegate {
     func appRemoteDidEstablishConnection(_ appRemote: SPTAppRemote) {
         self.appRemote = appRemote
+        self.connected = true
         self.appRemote.playerAPI?.delegate = self
         self.appRemote.playerAPI?.subscribe(toPlayerState: { (result, error) in
             if let error = error {
@@ -184,6 +206,7 @@ extension SpotifyController: SPTAppRemoteDelegate {
     
     func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {
         print("disconnected: \(String(describing: error))")
+        self.connected = false
     }
 }
 

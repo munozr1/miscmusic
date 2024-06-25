@@ -88,7 +88,8 @@ struct MusicView: View {
             if let party = db.party {
                  db.updateParty(name: party.name, data: [
                         "currentTrack": track,
-                        "image": spotify.currentTrackImageURI
+                        "image": spotify.currentTrackImageURI,
+                        "artist": spotify.currentTrackArtist ?? "Artist"
                     ])
                 db.incrementPlayed()
             }

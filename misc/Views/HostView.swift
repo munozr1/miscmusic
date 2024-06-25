@@ -68,14 +68,14 @@ struct HostView: View {
             }, label: "End Party", background_color: .red)
             if(reconnect){
                 LongRoundButton(action: {
-                    spotify.connect()
+                    spotify.reconnect()
                 },icon: true ,label: "Sign in with Spotify", icon_name: "SpotifyLogo", system_icon: false)
             }
             Spacer()
             Spacer()
         }// end outermost vstack
-        .onChange(of: spotify.appRemote.isConnected, {
-            if(!spotify.appRemote.isConnected) {reconnect = true}
+        .onChange(of: spotify.connected, {
+            if(!spotify.connected) {reconnect = true}
             else {reconnect = false}
         })
     }
