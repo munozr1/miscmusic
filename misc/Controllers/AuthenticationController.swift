@@ -17,7 +17,7 @@ import FirebaseAuth
     static let shared = AuthenticationModel()
     fileprivate var currentNonce: String?
     var context = LAContext();
-    var authenticated: AuthenticationState = .loggedout
+    var authenticated: AuthenticationState = .loggedin
     var user: User?
     var demo: Bool = false
 

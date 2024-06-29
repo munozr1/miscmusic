@@ -12,6 +12,7 @@ struct CreatePartyView: View {
     var spotify = SpotifyController.shared
     @State var name: String = ""
     @Binding var state: String
+    @State var playerName: String
     @State var err: String = ""
     
     var body: some View {
@@ -65,7 +66,14 @@ struct CreatePartyView: View {
                 switch result {
                     case .success:
                         print("Party successfully created!")
+                    switch(playerName){
+                    case "Spotify":
                         state = "Host"
+                    case "Apple":
+                        state = "Apple"
+                    default:
+                        state = "Host"
+                    }
                     case .failure(let error):
                         print("Error creating party: \(error)")
                 }
@@ -101,5 +109,6 @@ struct CreatePartyView: View {
 
 #Preview {
     @State var s: String = "Test"
-    return CreatePartyView(state: $s)
+    @State var n: String = "Apple"
+    return CreatePartyView(state: $s, playerName: n)
 }

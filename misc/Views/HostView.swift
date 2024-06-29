@@ -96,7 +96,3 @@ struct HostView: View {
     }
 }
 
-#Preview {
-    @State var s = "Host"
-    return HomeView(state: $s)
-}

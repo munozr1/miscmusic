@@ -8,10 +8,12 @@
 import SwiftUI
 import FirebaseAuth
 
+
+
 struct HomeView: View {
     @ObservedObject var spotify = SpotifyController.shared
     @StateObject var db = FirestoreController.shared
-    @State var party_code: String = ""
+    @State var musicPlayer: (any MusicPlayer)? = nil
     @Binding var state: String
     
     
@@ -19,7 +21,7 @@ struct HomeView: View {
             VStack(alignment: .center){
                 switch state {
                 case "Create":
-                    CreatePartyView(state: $state)
+                    CreatePartyView(state: $state, playerName: musicPlayer?.name ?? "Spotify")
                 case "Join":
                     JoinPartyView(state: $state)
                 case "Host":
@@ -27,7 +29,9 @@ struct HomeView: View {
                 case "Guest":
                     GuestView(state: $state)
                 case "Spotify":
-                    SpotifyAuthView(state: $state)
+                    MusicPlayerAuthView(state: $state, musicPlayer: $musicPlayer)
+                case "Apple":
+                    AppleMusicView(state: $state)
                 default:
                     HostView(state: $state)
                 }
@@ -41,9 +45,4 @@ struct HomeView: View {
         }
         print("change")
     }
-}
-
-#Preview {
-    @State var h = "Spotify"
-    return HomeView(state: $h)
 }

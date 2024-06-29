@@ -10,7 +10,8 @@ import SpotifyiOS
 import Combine
 import Gzip
 
-class SpotifyController: NSObject, ObservableObject {
+class SpotifyController: NSObject, ObservableObject, MusicPlayer {
+    
     static let shared = SpotifyController()
     let spotifyClientID: String = String(Secrets.SpotifyClientID)
     let spotifyRedirectURL = URL(string: String(Secrets.SpotifyRedirectURL))!
@@ -24,6 +25,7 @@ class SpotifyController: NSObject, ObservableObject {
     @Published var currentTrackImage: UIImage?
     @Published var currentTrackPaused: Bool = true
     @Published var connected: Bool = false
+    @Published var name: String = "Spotify"
 
     private var connectCancellable: AnyCancellable?
     private var disconnectCancellable: AnyCancellable?
@@ -55,6 +57,7 @@ class SpotifyController: NSObject, ObservableObject {
         return appRemote
     }()
     
+    func search(query: String, token: String ) async {}
     func search(query: String, token: String ) async throws -> SpotifySearchResponse {
         // Replace with your actual Bearer token
         

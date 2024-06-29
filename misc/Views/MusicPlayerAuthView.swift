@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct SpotifyAuthView: View {
+struct MusicPlayerAuthView: View {
     var db = FirestoreController.shared
     @ObservedObject var spotify = SpotifyController.shared
     @Binding var state: String
+    @Binding var musicPlayer: (any MusicPlayer)?
     var body: some View {
         VStack{
             HStack{
@@ -29,6 +30,14 @@ struct SpotifyAuthView: View {
                     state = "Create"
                 }
             },icon: true ,label: "Sign in with Spotify", icon_name: "SpotifyLogo", system_icon: false)
+            LongRoundButton(action: {
+                musicPlayer = AppleMusicController()
+                Task{
+                    print("connecting to apple music")
+                    await musicPlayer?.connect()
+                }
+                state = "Create"
+            },icon: true ,label: "Sign in with Apple Music", icon_name: "apple.logo", system_icon: true)
             Button{
                 state = "Join"
             } label: {
@@ -45,7 +54,4 @@ struct SpotifyAuthView: View {
     }// end body
     
 } // end view
-#Preview {
-    @State var s = "Spotify"
-    return HomeView(state: $s)
-}
+

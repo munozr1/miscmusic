@@ -32,10 +32,6 @@ struct SideMenu: View {
     }
 }
 
-#Preview {
-    @State var s: String = "Host"
-    return HomeView(state: $s)
-}
 
 enum SideMenuRowType: Int, CaseIterable{
     case signout = 0
